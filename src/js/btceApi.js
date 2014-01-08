@@ -9,6 +9,8 @@ var btceAPI = function (options) {
 	this.apiPath = "/tapi";
 	
 	jQuery.extend(this, options);
+
+	this.setAuthHeaders();
 };
 
 btceAPI.prototype.makeSign = function(data, key){
@@ -31,16 +33,51 @@ btceAPI.prototype.setAuthHeaders = function(){
 }
 
 btceAPI.prototype.request = function(method, params){
+	var self = this;
 	params = params || {};
 	params.method=method;
-	params.nonce = ++this.nonce;
+	params.nonce = ++self.nonce;
 
-	return $.ajax({
-	  url: this.hostUrl+this.apiPath,
+	var defer = $.Deferred();
+
+	$.ajax({
+	  url: self.hostUrl+self.apiPath,
 	  cache: false,
 	  dataType: 'json',
 	  type: 'POST',
 	  data: params,
+	  success : function(res, textStatus, xhr) {
+	  	if (res.success===0){
+	  		//processing wrong nonce number provided error. Trying again
+	  		if (res.error.indexOf("invalid nonce parameter")!=-1){
+	  			self.nonce = parseInt(res.error.match(/\d+/ig)[0]);
+	  			self.request(method, params).then(function(res){
+	  				defer.resolve(res);
+	  			})
+	  		} else{
+	  			defer.reject(res);
+	  		}
+
+	  	} else{
+	  		defer.resolve(res.return);
+	  	}
+	  }, 
+	  error: function(xhr, textStatus){
+	  	defer.reject(xhr);
+	  }
 	});
+
+	return defer.promise();
 };
 
+//Open btc-e api to get ticker
+btceAPI.prototype.tickerBTCUSD = function(){
+	return $.getJSON("https://btc-e.com/api/2/btc_usd/ticker");
+}
+
+btceAPI.prototype.tradesBTCUSD = function(){
+	return $.getJSON("https://btc-e.com/api/2/btc_usd/trades");
+}
+btceAPI.prototype.depthBTCUSD = function(){
+	return $.getJSON("https://btc-e.com/api/2/btc_usd/depth");
+}
