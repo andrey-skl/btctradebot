@@ -9,11 +9,11 @@
 	for (var i in back.table){
 		var row = back.table[i];
 		vizualizeArray.push([
-				row[0].toString(),
-				row[5],
-				row[3],
-				row[4],
-				row[6]
+				row.date.toString(),
+				row.min,
+				row.open,
+				row.close,
+				row.max
 			])
 	}
 	
@@ -32,3 +32,17 @@
 
 	  google.setOnLoadCallback(drawVisualization);
 //});
+
+
+$(function() {
+      var options = {
+        title: 'BTC/USD'
+        , adjust: 0
+        , indicators : [
+            ['EMA', 'c', 10]
+          , ['EMA', 'c', 20]
+          , ['MACD', 12, 26, 9]
+        ]
+      };
+        window.chart = new Candlestick("myChart",back.table, options);
+    });
