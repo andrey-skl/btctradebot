@@ -11,14 +11,18 @@
     "scripts": [
       "js/vendor/jquery-2.0.3.js",
       "js/vendor/hmac-sha512.js",
+	  "js/vendor/js-TA.js",
       "js/btceApi.js",
+	  "js/bitcoinwisdomApi.js",
       "js/background.js"
     ]
   },
   "permissions": [
     "tabs",	  
     "notifications", 
-    "https://btc-e.com/*"
+	"background",
+    "https://btc-e.com/*",
+	"http://s2.bitcoinwisdom.com/*"
   ],
 	"browser_action": {
       "default_name": "__MSG_extName__",
@@ -29,6 +33,6 @@
 
    "default_locale": "ru",
    "homepage_url": "http://vkontakte.ru/btctradebot",
-   "web_accessible_resources": ["js/vkInner.js"],
-   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'; style-src 'self' 'unsafe-inline';"
+   "web_accessible_resources": ["html/chart.html", "js/chartPage.js"],
+   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com https://www.google.com; object-src 'self'; style-src 'self' 'unsafe-inline' https://www.google.com https://ajax.googleapis.com;"
 }
