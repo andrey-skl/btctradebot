@@ -14,13 +14,10 @@ btceApi.tickerBTCUSD().then(function(res){
 
 bitcoinwisdomApi.getBtceBtcUsdChart().then(function(res){
 	console.log("charts:");
-
 	
 	var closedPrices = [];
 	for (var i in res){
-		var row = res[i];
-		row[0] = new Date(row[0]*1000);
-		closedPrices.push(row[6]);
+		closedPrices.push(res[i].close);
 	}
 	
 	var ema = TA.EMAverage(closedPrices, 4)

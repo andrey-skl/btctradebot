@@ -11,10 +11,11 @@
     "scripts": [
       "js/vendor/jquery-2.0.3.js",
       "js/vendor/hmac-sha512.js",
-	  "js/vendor/js-TA.js",
-      "js/btceApi.js",
-	  "js/bitcoinwisdomApi.js",
-      "js/background.js"
+      "js/vendor/underscore.js",
+	     "js/vendor/js-TA.js",
+        "js/btceApi.js",
+	     "js/bitcoinwisdomApi.js",
+        "js/background.js"
     ]
   },
   "permissions": [
