@@ -2,6 +2,20 @@
 var back = chrome.extension.getBackgroundPage();
 
 $(function() {
+
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/clouds");
+    editor.getSession().setMode("ace/mode/javascript");
+
+    $("#saveStrategy").on("click", function(e){
+    	var strategySrc = editor.getValue();
+    	localStorage.strategy = strategySrc;
+    });
+
+    var loadStrategy = function(){
+    	return localStorage.strategy;
+    }
+
 	var makeCharts = function(data, flags, lines){
 		var ohlc = [],
 			volume = [],
@@ -90,77 +104,9 @@ $(function() {
 		});
 	}
 
-	var strategy = "\
-	var strategyProcessor = function(api, trader){\
-		var pauseLength = 5;\
-		var iterator = pauseLength;\
-		var isBuyed = false;\
-		var summ = 0;\
-		var lastBuyPrice = 0;\
-		var stopLoss = 10;\
-		var takeProfit = 40;\
-		var emaMinGraph = trader.addChart('EMA3');\
-		var emaMaxGraph = trader.addChart('EMA10');\
-		this.handlePeriod= function(tradeData){\
-			if (iterator>0)\
-				iterator--;\
-			var lastPrice = tradeData[tradeData.length-1].close;\
-			var lastDate = tradeData[tradeData.length-1];\
-			var closedPrices = [];\
-			for (var i in tradeData){\
-				closedPrices.push(tradeData[i].close);\
-			}\
-			var minEmaPeriod = 3;\
-			var maxEmaPeriod = 10;\
-			var minEmaOffset =maxEmaPeriod-minEmaPeriod;\
-			var lastEmaLength = 4;\
-			var ema4 = TA.EMAverage(closedPrices, minEmaPeriod);\
-			var ema8 = TA.EMAverage(closedPrices, maxEmaPeriod);\
-			/*var ROC = TA.Roc(closedPrices, 10);*/\
-\
-			var lastEmas = [];\
-			/*filling last emas*/	\
-			for (var i=0; i<lastEmaLength; i++ ){\
-				lastEmas.push({\
-					ema4: ema4[ema4.length -minEmaPeriod-minEmaOffset -lastEmaLength+ i+1 ],\
-					ema8: ema8[ema8.length - maxEmaPeriod -lastEmaLength+ i+1 ]\
-				});\
-			}	\
-			emaMinGraph.push([trader.lastDate.getTime(),lastEmas[lastEmas.length-1].ema4]);\
-			emaMaxGraph.push([trader.lastDate.getTime(),lastEmas[lastEmas.length-1].ema8]);\
-			/*searching upper cross*/\
-			for (var i = 1; i<lastEmas.length; i++){\
-				var prevEmas = lastEmas[i-1];\
-				var lastEma = lastEmas[i];\
-				if (!prevEmas.ema4 || !prevEmas.ema8 || !lastEma.ema4 || !lastEma.ema8)\
-					continue;\
-				if (prevEmas.ema4 < prevEmas.ema8 && lastEma.ema4 > lastEma.ema8){\
-					if (iterator==0 && !isBuyed) {\
-						api.buy(lastPrice,1);iterator=pauseLength;isBuyed=true;\
-						lastBuyPrice = lastPrice;\
-					}\
-				} else if (prevEmas.ema4 > prevEmas.ema8 && lastEma.ema4 < lastEma.ema8){\
-					if (iterator==0 && isBuyed) {\
-						api.sell(lastPrice,1);iterator=pauseLength;isBuyed = false;\
-						summ+=lastPrice-lastBuyPrice;\
-						console.log('win:'+summ);\
-					}\
-				}\
-				if (isBuyed && lastPrice<lastBuyPrice-stopLoss){\
-					console.warn('stopLoss shouted!!!', trader.lastDate);\
-					api.sell(lastPrice,1);iterator=pauseLength;isBuyed = false;\
-					summ+=lastPrice-lastBuyPrice;\
-					console.log('win:'+summ);\
-				}\
-				if (isBuyed && lastPrice>lastBuyPrice+takeProfit){\
-					console.warn('takeProfit shouted!!!');\
-					api.sell(lastPrice,1);iterator=pauseLength;isBuyed = false;\
-					summ+=lastPrice-lastBuyPrice;\
-					console.log('win:'+summ);\
-				}\
-			}\
-		};	\
-	};";
+	var strategy = loadStrategy();
+
+	editor.setValue(strategy);
 
 	var trader = new tradeCore(back.btceApi, strategy);
 
