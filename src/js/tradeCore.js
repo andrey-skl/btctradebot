@@ -30,11 +30,13 @@
 
 		self.api = api;
 
+		self.lastDate = null;
 		self.buyListeners = [];
 		self.sellListeners = [];
 		self.cancelListeners = [];
+		self.graphs = {};
 
-		self.strategy = new strategyProcessor(new apiCallsHandler(self))
+		self.strategy = new strategyProcessor(new apiCallsHandler(self), self)
 		
 		if (typeof self.strategy.init == "function"){
 			self.strategy.init();
@@ -43,6 +45,7 @@
 
 	tradeCore.prototype.handleNewPeriod = function(tradeData){
 		if (typeof this.strategy.handlePeriod == "function"){
+			this.lastDate = tradeData[tradeData.length-1].date;
 			this.strategy.handlePeriod(tradeData);
 		} else
 			throw "Strategy dont implement handlePeriod method";		
@@ -54,6 +57,11 @@
 				listeners[i].apply(this, args);
 			}
 		}
+	}
+
+	tradeCore.prototype.addChart = function(name){
+		this.graphs[name] = [];
+		return this.graphs[name];
 	}
 
 	tradeCore.prototype.addBuyListener = function(fn){
