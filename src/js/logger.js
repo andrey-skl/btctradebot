@@ -13,8 +13,6 @@
 		return JSON.parse(logsString);
 	};
 
-	logs = loadFromLocalStorage();
-
 	window.log = function(msg, obj, category, type){
 		var logItem = {
 			msg: msg,
@@ -24,8 +22,6 @@
 		};
 
 		logs.push(logItem);
-
-		saveToLocalStorage(logs);
 
 		console.log(logItem)
 

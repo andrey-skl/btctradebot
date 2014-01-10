@@ -12,6 +12,14 @@ $(function() {
     	localStorage.strategy = strategySrc;
     });
 
+    var showInLog = function(msg){
+    	$("#log").text($("#log").text()+"\r\n"+msg);
+    }
+
+    window.log.onNewMessage = function(logItem){
+    	showInLog(logItem.msg)
+    }
+
     var loadStrategy = function(){
     	return localStorage.strategy;
     }
@@ -112,9 +120,13 @@ $(function() {
 
 	var flags = [];
 
-
+	var lastBuyPrice = 0;
+	var summ = 0;
 	trader.addBuyListener(function(rate, amount){
 		console.log("buyed",rate, amount, this.lastDate);
+		lastBuyPrice=rate;
+		var dateString = this.lastDate.toLocaleDateString()+" "+this.lastDate.toLocaleTimeString();
+		log(dateString+" buyed by "+rate);
 		//console.table(this.graphs["EMA3"]);
 		//console.table(this.graphs["EMA10"]);
 		flags.push({
@@ -124,6 +136,10 @@ $(function() {
 	});
 	trader.addSellListener(function(rate, amount){
 		console.log("selled",rate, amount);
+		var win = rate-lastBuyPrice;
+		summ+=win;
+		var dateString = this.lastDate.toLocaleDateString()+" "+this.lastDate.toLocaleTimeString();
+		log(dateString+" selled by "+rate+". win is "+win+". total summ = " +summ);
 		flags.push({
 			x: this.lastDate.getTime(),
 			title:"S",
