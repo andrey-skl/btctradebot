@@ -1,6 +1,3 @@
-	//chart docs https://google-developers.appspot.com/chart/interactive/docs/gallery/candlestickchart#Example
-//$(function(){
-	google.load('visualization', '1', {packages: ['corechart']});
 
 	var back = chrome.extension.getBackgroundPage();
 
@@ -16,33 +13,109 @@
 				row.max
 			])
 	}
-	
-	function drawVisualization() {
-		//data format: name, low, open, close, max, tooltip"
-        var data = google.visualization.arrayToDataTable(vizualizeArray, true);
-
-        var options = {
-          legend:'none',
-          hollowIsRising: true,
-        };
-
-        var chart = new google.visualization.CandlestickChart(document.getElementById('chart'));
-        chart.draw(data, options);
-	  }
-
-	  google.setOnLoadCallback(drawVisualization);
-//});
-
 
 $(function() {
-      var options = {
-        title: 'BTC/USD'
-        , adjust: 0
-        , indicators : [
-            ['EMA', 'c', 10]
-          , ['EMA', 'c', 20]
-          , ['MACD', 12, 26, 9]
-        ]
-      };
-        window.chart = new Candlestick("myChart",back.table, options);
-    });
+		var data = back.table;
+
+// split the data set into ohlc and volume
+		var ohlc = [],
+			volume = [],
+			dataLength = data.length;
+			
+		for (i = 0; i < dataLength; i++) {
+			ohlc.push([
+				data[i].date.getTime(), // the date
+				data[i].open, // open
+				data[i].max, // high
+				data[i].min, // low
+				data[i].close // close
+			]);
+			
+			volume.push([
+				data[i].date.getTime(), // the date
+				data[i].volume // the volume
+			])
+		}
+
+
+		// create the chart
+		$('#container').highcharts('StockChart', {
+		    rangeSelector : {
+				buttons : [{
+					type : 'hour',
+					count : 1,
+					text : '1h'
+				}, {
+					type : 'day',
+					count : 1,
+					text : '1D'
+				}, {
+					type : 'all',
+					count : 1,
+					text : 'All'
+				}],
+				selected : 1,
+				inputEnabled : false
+			},
+			yAxis: [{
+		        title: {
+		            text: 'OHLC'
+		        },
+		        height: 200,
+		        lineWidth: 2
+		    }, {
+		        title: {
+		            text: 'Volume'
+		        },
+		        top: 300,
+		        height: 100,
+		        offset: 0,
+		        lineWidth: 2
+		    }],
+			series : [{
+				name : 'BTC',
+				type: 'candlestick',
+				data : ohlc,
+				tooltip: {
+					valueDecimals: 2
+				}
+			}, {
+		        type: 'column',
+		        name: 'Volume',
+		        data: volume,
+		        yAxis: 1,
+		    }],
+
+
+		    title: {
+		        text: 'BTC/USD'
+		    },
+/*
+		    yAxis: [{
+		        title: {
+		            text: 'OHLC'
+		        },
+		        height: 200,
+		        lineWidth: 2
+		    }, {
+		        title: {
+		            text: 'Volume'
+		        },
+		        top: 300,
+		        height: 100,
+		        offset: 0,
+		        lineWidth: 2
+		    }],*/
+		    /*
+		    series: [{
+		        type: 'candlestick',
+		        name: 'AAPL',
+		        data: ohlc,
+		    }, {
+		        type: 'column',
+		        name: 'Volume',
+		        data: volume,
+		        yAxis: 1,
+		    }]*/
+		});
+});

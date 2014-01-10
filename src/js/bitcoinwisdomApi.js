@@ -33,7 +33,7 @@
 		},
 		getBtceBtcUsdChart: function(step){
 			var defer = $.Deferred();
-			bitcoinwisdomApi.getRawBtceBtcUsdChart().then(function(res){
+			bitcoinwisdomApi.getRawBtceBtcUsdChart(step).then(function(res){
 				defer.resolve(bitcoinwisdomApi.parseRawChart(res));
 			}, function(res){
 				defer.reject(res);

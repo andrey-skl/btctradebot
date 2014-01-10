@@ -13,6 +13,10 @@ var btceAPI = function (options) {
 	this.setAuthHeaders();
 };
 
+btceAPI.constant = {
+	BTCUSD : "btc_usd",
+}
+
 btceAPI.prototype.makeSign = function(data, key){
 	var sign = CryptoJS.HmacSHA512(data, key).toString();
 	return sign;
@@ -69,6 +73,36 @@ btceAPI.prototype.request = function(method, params){
 
 	return defer.promise();
 };
+
+btceAPI.prototype.sellRequest =  function(pair, rate, amount){
+	return btceApi.request("Trade",{
+		pair: pair, 
+		type: "sell",
+		rate: rate,
+		amount: amount,
+	});
+}
+
+btceAPI.prototype.buyRequest =  function(pair, rate, amount){
+	return btceApi.request("Trade",{
+		pair: pair, 
+		type: "buy",
+		rate: rate,
+		amount: amount,
+	});
+}
+
+btceAPI.prototype.cancelOrder = function(order_id){
+	return btceApi.request("CancelOrder",{
+		order_id: order_id,
+	});
+}
+
+btceAPI.prototype.getActiveOrders = function(pair){
+	return btceApi.request("ActiveOrders",{
+		pair: pair,
+	});
+}
 
 //Open btc-e api to get ticker
 btceAPI.prototype.tickerBTCUSD = function(){

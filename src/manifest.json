@@ -12,10 +12,14 @@
       "js/vendor/jquery-2.0.3.js",
       "js/vendor/hmac-sha512.js",
       "js/vendor/underscore.js",
-	     "js/vendor/js-TA.js",
-        "js/btceApi.js",
-	     "js/bitcoinwisdomApi.js",
-        "js/background.js"
+	    "js/vendor/js-TA.js",
+      "js/logger.js",
+      "js/btceApi.js",
+      "js/btceApiTradeInterface.js",
+	    "js/bitcoinwisdomApi.js",
+      "js/tradeCore.js",
+      "js/backTester.js",
+      "js/background.js"
     ]
   },
   "permissions": [
@@ -28,8 +32,7 @@
 	"browser_action": {
       "default_name": "__MSG_extName__",
 	  "default_title": "__MSG_extDescr__",
-	  "default_icon": "img/icon128.png",
-	  "default_popup": "html/popup.html"
+	  "default_icon": "img/icon128.png"
   	},
 
    "default_locale": "ru",
