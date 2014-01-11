@@ -5,11 +5,11 @@
 	var apiCallsHandler = function(trader){
 		this.buy = function(rate, amount){
 			trader.callAllListeners(trader.buyListeners, [rate, amount]);
-			//return trader.api.buy(rate, amount);
+			return trader.api.buy(rate, amount);
 		};
 		this.sell = function(rate, amount){
 			trader.callAllListeners(trader.sellListeners, [rate, amount]);
-			//return trader.api.sell(rate, amount);
+			return trader.api.sell(rate, amount);
 		};
 		this.activeOrders = function(){
 			return trader.api.activeOrders();

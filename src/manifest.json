@@ -25,7 +25,8 @@
   "permissions": [
     "tabs",	  
     "notifications", 
-	"background",
+	   "background",
+     "storage",
     "https://btc-e.com/*",
 	"http://s2.bitcoinwisdom.com/*"
   ],
