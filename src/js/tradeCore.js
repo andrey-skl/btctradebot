@@ -7,6 +7,27 @@
 			trader.callAllListeners(trader.buyListeners, [rate, amount]);
 			return trader.api.buy(rate, amount);
 		};
+		this.buyAllByMinRate = function(recommendRate){
+			var self = this;
+			var defer = $.Deferred();
+			trader.api.status().then(function(status){
+				var last = status.last||recommendRate;
+				self.buy(last, status.balance.usd / last).then(function(res){
+					defer.resolve(res);
+				});
+			});
+			return defer.promise();
+		},
+		this.sellAllByMaxRate = function(recommendRate){
+			var self = this;
+			var defer = $.Deferred();
+			trader.api.status().then(function(status){
+				self.sell(status.last||recommendRate, status.balance.btc).then(function(res){
+					defer.resolve(res);
+				});
+			});
+			return defer.promise();
+		},
 		this.sell = function(rate, amount){
 			trader.callAllListeners(trader.sellListeners, [rate, amount]);
 			return trader.api.sell(rate, amount);

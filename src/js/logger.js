@@ -23,7 +23,7 @@
 
 		logs.push(logItem);
 
-		console.log(logItem)
+		console.log(logItem.msg, logItem.obj);
 
 		if (typeof log.onNewMessage == "function")
 		{
