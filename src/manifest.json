@@ -17,6 +17,7 @@
       "js/btceApi.js",
       "js/btceApiTradeInterface.js",
 	    "js/bitcoinwisdomApi.js",
+      "js/blockchaininfoApi.js",
       "js/tradeCore.js",
       "js/backTester.js",
       "js/background.js"
@@ -28,7 +29,8 @@
 	   "background",
      "storage",
     "https://btc-e.com/*",
-	"http://s2.bitcoinwisdom.com/*"
+	"http://s2.bitcoinwisdom.com/*",
+  "https://blockchain.info/*"
   ],
 	"browser_action": {
       "default_name": "__MSG_extName__",

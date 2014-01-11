@@ -41,6 +41,7 @@ var pageUi = {
 			currentStrategyName = name;
 			$(".iCurrentStrategyName").text(name);
 			editor.setValue(strategies[name]);
+			editor.clearSelection();
 			strategyStorage.setSelected(name);
 			self.onStrategyChanged(name, strategies[name]);
 		}
@@ -80,6 +81,7 @@ var pageUi = {
 
 		$("#testSelectedStrategy").on("click", function(e){
 			var testingController = new testingControl();
+			self.clearLog();
 			//todo: replace back.table to dynamic datasource
 			testingController.testStrategy(back.table, self.selectedStrategySrc);
 		});
@@ -103,6 +105,9 @@ var pageUi = {
 
 	},
 
+	clearLog: function(){
+		$("#logtext").empty();
+	},
 	showInLog: function(msg){
     	$("#logtext").text($("#logtext").text()+"\r\n"+msg);
     },
@@ -151,7 +156,7 @@ var pageUi = {
 		for (var i in lines){
 			series.push({
 				name:i,
-				data: lines[i]
+				data: lines[i],
 			})
 		}
 
@@ -178,14 +183,14 @@ var pageUi = {
 		        title: {
 		            text: 'Trading'
 		        },
-		        height: 200,
+		        height: 250,
 		        lineWidth: 2
 		    }, {
 		        title: {
 		            text: 'Volume'
 		        },
-		        top: 300,
-		        height: 100,
+		        top: 350,
+		        height: 50,
 		        offset: 0,
 		        lineWidth: 2
 		    }],

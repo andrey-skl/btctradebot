@@ -14,7 +14,7 @@
 			//returns chart array like
 			//[[1389276000,26434758,26451647,788.99,801.001,810,783.503,1893.1854368199847],..]
 			//where 0:unix time, 1:?, 2:?, 3: open, 4:close, 5:max, 6:min, 7:volume
-			return $.getJSON("http://s2.bitcoinwisdom.com:8080/period?step="+step+"&symbol=btcebtcusd&mode=simple");
+			return $.getJSON("http://s2.bitcoinwisdom.com:8080/period?step="+step+"&symbol=btcebtcusd");
 		},
 		parseRawChart: function(rawData){
 			var res = [];
