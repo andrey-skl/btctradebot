@@ -39,7 +39,7 @@ var pageUi = {
 		var setCurrentStrategy = function(name){
 			if (!name) return;
 			currentStrategyName = name;
-			$("#currentStrategyName").text(name);
+			$(".iCurrentStrategyName").text(name);
 			editor.setValue(strategies[name]);
 			strategyStorage.setSelected(name);
 			self.onStrategyChanged(name, strategies[name]);
@@ -83,11 +83,24 @@ var pageUi = {
 			//todo: replace back.table to dynamic datasource
 			testingController.testStrategy(back.table, self.selectedStrategySrc);
 		});
+
+		var isChartHidden = false;
+		var $showHideChartButton = $("#showHideCharts");
+		$showHideChartButton.on("click", function(e){
+			isChartHidden = ! isChartHidden;
+			$("#showHideChartsText").text(isChartHidden ? "Show charts" : "Hide charts");
+			if (isChartHidden) {
+				$("#container").hide();
+			} else {
+				$("#container").show();	
+			}
+		})
 	},
 
 	onStrategyChanged: function(name, src){
 		this.selectedStrategyName = name;
 		this.selectedStrategySrc = src;
+
 	},
 
 	showInLog: function(msg){
@@ -163,7 +176,7 @@ var pageUi = {
 			},
 			yAxis: [{
 		        title: {
-		            text: 'OHLC'
+		            text: 'Trading'
 		        },
 		        height: 200,
 		        lineWidth: 2
