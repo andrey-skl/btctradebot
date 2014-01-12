@@ -64,7 +64,8 @@ var pageUi = {
 		var addHandleListeners = function(){
 			back.tradeController.addHandleListener(function(trader, res){
 				log("period handled at "+trader.lastDate);
-				chartsUi.makeCharts(back.tradeController.tradingData, this.flags, trader.graphs);
+				//chartsUi.makeCharts(back.tradeController.tradingData, this.flags, trader.graphs);
+				chartsUi.addPeriod(back.tradeController.tradingData, this.flags, trader.graphs);
 			}, "controlPanelListener");
 		}
 
@@ -121,6 +122,7 @@ var pageUi = {
 	},
 
 	clearLog: function(){
+		log.clear();
 		$("#logtext").empty();
 	},
 	showInLog: function(msg){

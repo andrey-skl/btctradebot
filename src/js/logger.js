@@ -45,6 +45,10 @@
 		}
 	}
 
+	log.clear = function(){
+		log.logs.length=0;
+	}
+
 	log.handlers = [];
 
 })();
