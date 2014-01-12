@@ -9,16 +9,16 @@ testingControl.prototype.testStrategy = function(data, testStrategy){
 
 	this.addListeners(trader);
 
-	var tester = new backTester(back.table, trader);
+	var tester = new backTester(table, trader);
 	log("Start backtest trading. Start balance: BTC="+fakeApi.fakeBalance.btc+", USD="+
-		fakeApi.fakeBalance.usd+", equal "+this.getUSDequivalent(fakeApi.fakeBalance, back.table[back.table.length-1].close));
+		fakeApi.fakeBalance.usd+", equal "+this.getUSDequivalent(fakeApi.fakeBalance, table[table.length-1].close));
 	
 	tester.test();
 
 	log("Finish backtesting. End balance: BTC="+fakeApi.fakeBalance.btc+", USD="+fakeApi.fakeBalance.usd+
-		", equal "+this.getUSDequivalent(fakeApi.fakeBalance, back.table[back.table.length-1].close))
+		", equal "+this.getUSDequivalent(fakeApi.fakeBalance, table[table.length-1].close))
 
-	pageUi.makeCharts(back.table, this.flags, trader.graphs);
+	chartsUi.makeCharts(table, this.flags, trader.graphs);
 }
 
 testingControl.prototype.getUSDequivalent = function(balance, lastAmount){

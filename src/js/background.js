@@ -1,25 +1,32 @@
 
-window.btceApi = new btceAPI({
+window.api = new btceAPI({
 	key: localStorage.apiKey,
 	secret: localStorage.secret,
 });
 
-btceApi.request("getInfo").then(function(res){
+api.request("getInfo").then(function(res){
 	log("Your info:",res);
 });
 
-btceApi.tickerBTCUSD().then(function(res){
-	log("Situation:",res.ticker);
-})
-
-bitcoinwisdomApi.getBtceBtcUsdChart(3600).then(function(res){
-	console.log("data loaded");
-
-	window.table = res;
+chrome.browserAction.onClicked.addListener(function (tab){
+	//chrome.tabs.create({url: "html/backTesting.html"});
+	chrome.tabs.create({url: "html/controlPanel.html"});
 });
 
+window.tradeController = null;
 
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+	if (request.message == "startTrading"){
+		var trader = new tradeCore(api, request.selectedStrategySrc);
+		tradeController = new tradingController(trader, bitcoinwisdomApi.getBtceBtcUsdChart);
 
-chrome.browserAction.onClicked.addListener(function (tab){
-	chrome.tabs.create({url: "html/chart.html"});
+		sendResponse(tradeController);
+
+		tradeController.start(60);
+	}
+	if (request.message == "stopTrading"){
+
+		sendResponse(tradeController);
+		tradeController.stop();
+	}
 });

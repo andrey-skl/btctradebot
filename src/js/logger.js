@@ -27,11 +27,25 @@
 
 		if (typeof log.onNewMessage == "function")
 		{
-			log.onNewMessage(logItem)
+			log.callAllListeners([logItem])
 		}
 	}
 
-	log.onNewMessage = function(){};
+	log.logs = logs;
+
+	log.onNewMessage = function(fn){{
+		if (typeof fn == 'function'){
+			log.handlers.push(fn);
+		}
+	}};
+
+	log.callAllListeners = function(args){
+		for (var i in log.handlers){
+			log.handlers[i].apply(this, args);
+		}
+	}
+
+	log.handlers = [];
 
 })();
 

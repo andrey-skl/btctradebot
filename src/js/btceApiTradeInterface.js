@@ -1,8 +1,9 @@
 
 btceAPI.prototype.status = function(){
+	var self = this;
 	var defer = $.Deferred();
-	btceApi.request("getInfo").then(function(res){
-		btceApi.tickerBTCUSD().then(function(status){
+	self.request("getInfo").then(function(res){
+		self.tickerBTCUSD().then(function(status){
 			defer.resolve({
 				balance: res.funds,
 				last: status.last,
@@ -14,7 +15,7 @@ btceAPI.prototype.status = function(){
 }
 
 btceAPI.prototype.activeOrders = function(){
-	return btceApi.getActiveOrders(btceAPI.constant.BTCUSD).then(function(res){
+	return this.getActiveOrders(btceAPI.constant.BTCUSD).then(function(res){
 		var orders = [];
 		for (var i in res){
 			orders.push({
@@ -29,17 +30,17 @@ btceAPI.prototype.activeOrders = function(){
 }
 
 btceAPI.prototype.sell = function(rate, amount){
-	return btceApi.sellRequest(btceAPI.constant.BTCUSD, rate, amount).then(function(res){
+	return this.sellRequest(btceAPI.constant.BTCUSD, rate, amount).then(function(res){
 		return res.order_id;
 	});
 }
 
 btceAPI.prototype.buy = function(rate, amount){
-	return btceApi.buyRequest(btceAPI.constant.BTCUSD, rate, amount).then(function(res){
+	return this.buyRequest(btceAPI.constant.BTCUSD, rate, amount).then(function(res){
 		return res.order_id;
 	});
 }
 
 btceAPI.prototype.cancel = function(order_id){
-	return btceApi.cancelOrder(order_id);
+	return this.cancelOrder(order_id);
 }

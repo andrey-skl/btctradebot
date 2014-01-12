@@ -18,7 +18,7 @@
       "js/btceApiTradeInterface.js",
 	    "js/bitcoinwisdomApi.js",
       "js/tradeCore.js",
-      "js/backTester.js",
+      "js/tradingController.js",
       "js/background.js"
     ]
   },

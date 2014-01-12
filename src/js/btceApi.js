@@ -75,7 +75,7 @@ btceAPI.prototype.request = function(method, params){
 };
 
 btceAPI.prototype.sellRequest =  function(pair, rate, amount){
-	return btceApi.request("Trade",{
+	return this.request("Trade",{
 		pair: pair, 
 		type: "sell",
 		rate: rate,
@@ -84,7 +84,7 @@ btceAPI.prototype.sellRequest =  function(pair, rate, amount){
 }
 
 btceAPI.prototype.buyRequest =  function(pair, rate, amount){
-	return btceApi.request("Trade",{
+	return this.request("Trade",{
 		pair: pair, 
 		type: "buy",
 		rate: rate,
@@ -93,13 +93,13 @@ btceAPI.prototype.buyRequest =  function(pair, rate, amount){
 }
 
 btceAPI.prototype.cancelOrder = function(order_id){
-	return btceApi.request("CancelOrder",{
+	return this.request("CancelOrder",{
 		order_id: order_id,
 	});
 }
 
 btceAPI.prototype.getActiveOrders = function(pair){
-	return btceApi.request("ActiveOrders",{
+	return this.request("ActiveOrders",{
 		pair: pair,
 	});
 }

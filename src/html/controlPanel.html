@@ -1,0 +1,62 @@
+<html>
+<head>
+	<title>Control panel</title>
+
+	<link rel="stylesheet" href="../js/vendor/bootstrap/css/bootstrap.css">
+
+	<script src="../js/vendor/jquery-2.0.3.js"></script>
+	<script src="../js/vendor/js-TA.js"></script>
+	<script src="../js/vendor/highstock.js"></script>
+	<script src="../js/vendor/bootstrap/js/bootstrap.js"></script>
+
+	<script src="../js/tradeCore.js"></script>
+	<script src="../js/strategyStorage.js"></script>
+	<script src="../js/chartsUi.js"></script>
+	<script src="../js/tradingController.js"></script>
+
+	<script src="../js/controlPage/ui.js"></script>
+	<script src="../js/controlPage/page.js"></script>
+<style type="text/css" media="screen">
+    #controlPanel { 
+        width: 100%;
+        height: 85%;
+    }
+    #logtext{
+    	width: 100%;
+    	height: 85%;
+    }
+    #showHideCharts{
+    	position: fixed;
+    	top: 5px;
+    	right:20px;
+    	z-index: 9999;
+    }
+</style>
+
+</head>
+<body>
+	<div id="container" style="height: 500px; min-width: 500px;"></div>
+
+	<div id="controlPanel">
+		&nbsp;Select strategy: 
+		<div class="btn-group">
+		  <button id="strategySelector" type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
+		    <span id="currentStrategyName" class="iCurrentStrategyName">no one</span> <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu" id="strategylist">
+		  </ul>
+		</div>
+
+	  	<button type="button" class="btn btn-default btn-sm" id="startTradging">
+		  <span class="glyphicon glyphicon-plus-sign"></span> Start trading
+		</button>
+	  	<button type="button" class="btn btn-default btn-sm disabled" id="stopTrading">
+		  <span class="glyphicon glyphicon-plus-sign"></span> Stop trading
+		</button>
+
+
+		<textarea id="logtext" rows=25></textarea>
+	</div>
+
+
+</body>
