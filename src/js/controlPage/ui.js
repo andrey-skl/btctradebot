@@ -65,7 +65,7 @@ var pageUi = {
 
 		var addHandleListeners = function(){
 			back.tradeController.addHandleListener(function(trader, res){
-				//log("period handled at "+trader.lastDate);
+				log("period handled at "+trader.lastDate+". now="+new Date());
 				if (firstListenerFired){
 					chartsUi.makeCharts(back.tradeController.tradingData, back.tradeController.flags, back.tradeController.trader.graphs);
 					firstListenerFired = false;

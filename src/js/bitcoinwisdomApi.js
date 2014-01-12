@@ -9,12 +9,16 @@
 	var VOLUME_INDEX = 7;
 
 	window.bitcoinwisdomApi = {
-		getRawBtceBtcUsdChart : function(step){
+		getRawBtceBtcUsdChart : function(step, isSimple){
 			step=step || 3600;
 			//returns chart array like
 			//[[1389276000,26434758,26451647,788.99,801.001,810,783.503,1893.1854368199847],..]
 			//where 0:unix time, 1:?, 2:?, 3: open, 4:close, 5:max, 6:min, 7:volume
-			return $.getJSON("http://s2.bitcoinwisdom.com:8080/period?step="+step+"&symbol=btcebtcusd");
+			var url = "http://s2.bitcoinwisdom.com:8080/period?step="+step+"&symbol=btcebtcusd";
+			if (isSimple) {
+				url+="&mode=simple"
+			}
+			return $.getJSON(url);
 		},
 		parseRawChart: function(rawData){
 			var res = [];
@@ -31,9 +35,9 @@
 			}
 			return res;
 		},
-		getBtceBtcUsdChart: function(step){
+		getBtceBtcUsdChart: function(step, isSimple){
 			var defer = $.Deferred();
-			bitcoinwisdomApi.getRawBtceBtcUsdChart(step).then(function(res){
+			bitcoinwisdomApi.getRawBtceBtcUsdChart(step, isSimple).then(function(res){
 				defer.resolve(bitcoinwisdomApi.parseRawChart(res));
 			}, function(res){
 				defer.reject(res);

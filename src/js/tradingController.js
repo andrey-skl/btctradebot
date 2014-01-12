@@ -15,16 +15,30 @@
 
 	tradingController.prototype.start = function(timeFrameSeconds){
 		timeFrameSeconds = timeFrameSeconds || 3600;
+		var interval = timeFrameSeconds*1000;
+		var lastTimeFired = 0;
+		var lastDateLoaded = null;
 		var self = this;
 		var intervalHandler = function(){
-			self.getData(timeFrameSeconds).then(function(res){
-				self.tradingData = res;
-				self.trader.handleNewPeriod(res);
-				self.callAllListeners(self.handleListeners, [self.trader, res]);
-			});
+			var timeSpan = new Date() - lastTimeFired;
+			if (timeSpan >= interval){
+				self.getData(timeFrameSeconds, true).then(function(res){
+					if (res[res.length-1].date != lastDateLoaded){						
+						self.tradingData = res;
+						self.trader.handleNewPeriod(res);
+						self.callAllListeners(self.handleListeners, [self.trader, res]);
+						lastDateLoaded = res[res.length-1].date;
+
+						lastTimeFired = new Date();
+					} else {
+						console.warn("Last date loaded is same. Repeating");
+					}
+
+				});
+			}
 		};
 
-		this.timerId = setInterval(intervalHandler, timeFrameSeconds*1000);
+		this.timerId = setInterval(intervalHandler, 3000);
 
 		intervalHandler();
 
@@ -62,7 +76,7 @@
 		trader.addBuyListener(function(rate, amount){
 			lastBuyPrice=rate;
 			var dateString = this.lastDate.toLocaleDateString()+" "+this.lastDate.toLocaleTimeString();
-			log(dateString+" buyed by "+rate);
+			log(dateString+" buyed "+amount+" btc by "+rate);
 			self.flags.push({
 				x: this.lastDate.getTime(),
 				title:"B",
@@ -73,7 +87,7 @@
 			var win = rate-lastBuyPrice;
 			summ+=win;
 			var dateString = this.lastDate.toLocaleDateString()+" "+this.lastDate.toLocaleTimeString();
-			log(dateString+" selled by "+rate+". win is "+win+". total summ = " +summ);
+			log(dateString+" selled "+amount+" by "+rate+". win is "+win+". total summ = " +summ);
 			self.flags.push({
 				x: this.lastDate.getTime(),
 				title:"S",
