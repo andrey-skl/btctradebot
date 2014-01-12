@@ -128,23 +128,17 @@ var chartsUi = {
 				data[index].close 
 	        	], false, true);
 
-	        newFlag && chart.series[1].addPoint([newFlag.x, newFlag.y], false, true);
+	        newFlag && chart.series[1].addPoint([newFlag.x, newFlag.y], false, false);
 
-	        chart.series[2].addPoint([data[index].date.getTime(),data[index].volume], false, true);
+	        chart.series[2].addPoint([data[index].date.getTime(),data[index].volume], true, false, true);
 
 	        if (lines){
-	        	var i = 4;
+	        	var i = 3;
 	        	for (var j in lines){
 	        		line = lines[j];
 	        		var ser = chart.series[i];
-	        		if (ser){
-	        			chart.series[i].addPoint(line[line.length-1], true, true);
-	        		} else {
-	        			chart.addSeries({
-	        				name: j,
-	        				data: line,
-	        			}, true);
-	        		}
+        			ser.addPoint(line[line.length-1], true, false, true);
+
 	        		i += 1;
 	        	}
 	        }

@@ -61,11 +61,17 @@ var pageUi = {
 	controlUiInit: function(){
 		var self = this;
 
+		var firstListenerFired = true;
+
 		var addHandleListeners = function(){
 			back.tradeController.addHandleListener(function(trader, res){
-				log("period handled at "+trader.lastDate);
-				//chartsUi.makeCharts(back.tradeController.tradingData, this.flags, trader.graphs);
-				chartsUi.addPeriod(back.tradeController.tradingData, this.flags, trader.graphs);
+				//log("period handled at "+trader.lastDate);
+				if (firstListenerFired){
+					chartsUi.makeCharts(back.tradeController.tradingData, back.tradeController.flags, back.tradeController.trader.graphs);
+					firstListenerFired = false;
+				} else {
+					chartsUi.addPeriod(back.tradeController.tradingData, this.flags, trader.graphs);
+				}
 			}, "controlPanelListener");
 		}
 
@@ -76,6 +82,7 @@ var pageUi = {
 			log.logs.map(function(logItem){
 				self.showInLog(logItem.msg);
 			})
+			firstListenerFired = false;
 			chartsUi.makeCharts(back.tradeController.tradingData, back.tradeController.flags, back.tradeController.trader.graphs);
 		} else {
 			
