@@ -1,33 +1,43 @@
+var settingsOpened = false;
 
-window.api = new btceAPI({
-	key: localStorage.apiKey,
-	secret: localStorage.secret,
-});
+var init = function(){
+	window.api = new btceAPI({
+		key: localStorage.apiKey,
+		secret: localStorage.secret,
+	});
 
-api.request("getInfo").then(function(res){
-	log("Your info:",res);
-});
+	window.tradeController = null;
 
-/*
-chrome.browserAction.onClicked.addListener(function (tab){
-	//chrome.tabs.create({url: "html/backTesting.html"});
-	chrome.tabs.create({url: "html/controlPanel.html"});
-});*/
+	chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+		if (request.message == "startTrading"){
+			var trader = new tradeCore(api, request.selectedStrategySrc);
+			tradeController = new tradingController(trader, bitcoinwisdomApi.getBtceBtcUsdChart);
 
-window.tradeController = null;
+			sendResponse(tradeController);
 
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-	if (request.message == "startTrading"){
-		var trader = new tradeCore(api, request.selectedStrategySrc);
-		tradeController = new tradingController(trader, bitcoinwisdomApi.getBtceBtcUsdChart);
+			tradeController.start(60);
+		}
+		if (request.message == "stopTrading"){
 
-		sendResponse(tradeController);
+			sendResponse(tradeController);
+			tradeController.stop();
+		}
+	});
+	log("extension initialized successfully.")
+}
 
-		tradeController.start(60);
+var checkAndInit = function(){
+	var key = localStorage.apiKey, secret = localStorage.secret;
+
+	if (!key || !secret){
+		if (!settingsOpened){
+			chrome.tabs.create({url: "html/settings.html"});
+			settingsOpened = true;
+		}
+		setTimeout(checkAndInit, 1000);
+	} else {
+		init();
 	}
-	if (request.message == "stopTrading"){
+}
 
-		sendResponse(tradeController);
-		tradeController.stop();
-	}
-});
+checkAndInit();

@@ -1,5 +1,6 @@
 {
   "name": "__MSG_extName__",
+  "author": "Skladchikov Andrey",
   "description": "__MSG_extDescr__",
   "icons": {
    		"128": "img/icon128.png"
@@ -35,7 +36,9 @@
 	  "default_title": "__MSG_extDescr__",
 	  "default_icon": "img/icon128.png",
     "default_popup": "html/popup.html"
-  	},
+	},
+
+  "options_page": "html/settings.html",
 
    "default_locale": "ru",
    "homepage_url": "http://vkontakte.ru/btctradebot",
