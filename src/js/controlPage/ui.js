@@ -65,13 +65,15 @@ var pageUi = {
 
 		var addHandleListeners = function(){
 			back.tradeController.addHandleListener(function(trader, res){
-				log("period handled at "+trader.lastDate+". now="+new Date());
+				//log(trader.lastDate.getTime()+" period handled at "+trader.lastDate+". now="+new Date());
+
 				if (firstListenerFired){
 					chartsUi.makeCharts(back.tradeController.tradingData, back.tradeController.flags, back.tradeController.trader.graphs);
 					firstListenerFired = false;
 				} else {
 					chartsUi.addPeriod(back.tradeController.tradingData, this.flags, trader.graphs);
 				}
+
 			}, "controlPanelListener");
 
 			back.tradeController.trader.addBuyListener(function(rate, amount){
@@ -94,7 +96,7 @@ var pageUi = {
 			chartsUi.makeCharts(back.tradeController.tradingData, back.tradeController.flags, back.tradeController.trader.graphs);
 		} else {
 			
-			back.bitcoinwisdomApi.getBtceBtcUsdChart(3600).then(function(res){
+			back.bitcoinwisdomApi.getBtceBtcUsdChart(3600, true).then(function(res){
 				console.log("data loaded");
 
 				window.table = res;

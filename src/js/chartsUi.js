@@ -45,7 +45,7 @@ var chartsUi = {
 		for (var i in lines){
 			series.push({
 				name:i,
-				data: lines[i],
+				data: lines[i].slice(),
 			})
 		}
 
@@ -139,7 +139,7 @@ var chartsUi = {
 	        	for (var j in lines){
 	        		line = lines[j];
 	        		var ser = chart.series[i];
-        			ser.addPoint(line[line.length-1], true, false, true);
+        			ser.addPoint(line[line.length-1].slice(), true, false, true);
 
 	        		i += 1;
 	        	}
