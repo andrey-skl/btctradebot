@@ -6,7 +6,7 @@ btceAPI.prototype.status = function(){
 		self.tickerBTCUSD().then(function(status){
 			defer.resolve({
 				balance: res.funds,
-				last: status.last,
+				last: status.ticker.last,
 			});
 		});
 	});

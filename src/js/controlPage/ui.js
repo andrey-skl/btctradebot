@@ -12,7 +12,7 @@ var pageUi = {
 		var self = this;
 		var strategies = strategyStorage.load();
 
-		var currentStrategyName = strategyStorage.getSelected();
+		var currentStrategyName = localStorage.selectedTradingStrategy;
 		if (strategies[currentStrategyName]==undefined){
 			currentStrategyName = null;
 		}
@@ -36,7 +36,7 @@ var pageUi = {
 			if (!name) return;
 			currentStrategyName = name;
 			$(".iCurrentStrategyName").text(name);
-			strategyStorage.setSelected(name);
+			localStorage.selectedTradingStrategy = name;
 			self.onStrategyChanged(name, strategies[name]);
 		}
 

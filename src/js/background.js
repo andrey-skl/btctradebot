@@ -8,10 +8,11 @@ api.request("getInfo").then(function(res){
 	log("Your info:",res);
 });
 
+/*
 chrome.browserAction.onClicked.addListener(function (tab){
 	//chrome.tabs.create({url: "html/backTesting.html"});
 	chrome.tabs.create({url: "html/controlPanel.html"});
-});
+});*/
 
 window.tradeController = null;
 

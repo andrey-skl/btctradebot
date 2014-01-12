@@ -1,7 +1,45 @@
 <html>
 <head>
-	<script src="../js/popupPage.js"></script>
+	<link rel="stylesheet" href="../js/vendor/bootstrap/css/bootstrap.css">
+
+	<script src="../js/vendor/jquery-2.0.3.js"></script>
+	<script src="../js/popupPage/page.js"></script>
+
+<style type="text/css" media="screen">
+    body { 
+        width: 350px;
+        height: 300px;
+    }
+
+</style>
+
 </head>
 <body>
+	<div class="container">
+		<nav class="navbar navbar-inverse" role="navigation">
+		  <!-- Brand and toggle get grouped for better mobile display -->
+		  <div class="navbar-header">
+		  	<p class="navbar-text">BTC autotrader. Status: <span id="status"></span></p>
+		  </div>
 
+		</nav>
+
+		<ul class="nav nav-pills nav-stacked">
+		  <li><a href="avascript:void(0)" id="openControlPanel">Control panel</a></li>
+		  <li><a href="javascript:void(0)" id="openBacktesting">Backtesting</a></li>
+		</ul>
+
+		<div class="panel panel-default">
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">Your status:</div>
+
+		  <!-- List group -->
+		  <ul class="list-group">
+		    <li class="list-group-item">Last price: <span class="label label-info" id="lastPrice">...</span></li>
+		    <li class="list-group-item">Your BTC: <span class="label label-info" id="btcCount">...</span></li>
+		    <li class="list-group-item">Your USD: <span class="label label-info" id="usdCount">...</span></li>
+		    <li class="list-group-item">Equals USD: <span class="label label-success" id="usdEqualsCount">...</span></li>
+		  </ul>
+		</div>
+	</div>
 </body>
