@@ -44,7 +44,7 @@
 	window.tradeCore = function(api, strategySrc){
 		var self = this;
 		this.timeFrame = 3600;
-		
+
 		//strategySrcCode should create strategyProcessor object, constructor argument is API with standart trade interface
 		//which can contains init method and should contains handlePeriod(tradeData) method
 		//strategy can use TA-js lib
@@ -69,7 +69,7 @@
 	tradeCore.prototype.handleNewPeriod = function(tradeData){
 		if (typeof this.strategy.handlePeriod == "function"){
 			this.lastDate = tradeData[tradeData.length-1].date;
-			this.strategy.handlePeriod(tradeData);
+			return this.strategy.handlePeriod(tradeData);
 		} else
 			throw "Strategy dont implement handlePeriod method";		
 	}

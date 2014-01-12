@@ -1,6 +1,7 @@
 var chartsUi = {
 
 	makeSeries: function(data, flags, lines){
+		var flagsArray = flags ? flags.slice() : [];
 		var ohlc = [],
 			volume = [],
 			dataLength = data.length;
@@ -19,6 +20,7 @@ var chartsUi = {
 				data[i].volume // the volume
 			])
 		}
+
 		var series =[{
 				name : 'BTC',
 				type: 'candlestick',
@@ -29,7 +31,7 @@ var chartsUi = {
 				}
 			},{
 				type : 'flags',
-				data : flags,
+				data : flagsArray,
 				onSeries : 'quote',
 				shape : 'circlepin',
 				width : 16
@@ -117,7 +119,7 @@ var chartsUi = {
 		var chart = $('#container').highcharts();        
 		var lastDateStamp = data[data.length-1].date.getTime();
 
-        var newFlag = (flags.length && flags[flags.length-1].x == lastDateStamp) ? flags[flags.length-1] : null;
+        var newFlag = (flags.length && flags[flags.length-1].x >= lastDateStamp) ? flags[flags.length-1] : null;
 
 			var index = data.length-1;
 	        chart.series[0].addPoint(
@@ -142,7 +144,13 @@ var chartsUi = {
 	        		i += 1;
 	        	}
 	        }
+	},
 
-
-	}
+	addFlag: function(title, x){
+		var chart = $('#container').highcharts();        
+		chart.series[1].addPoint({
+				x: x,
+				title:title,
+			}, true, false);
+	},
 }

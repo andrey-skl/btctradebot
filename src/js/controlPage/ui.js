@@ -73,6 +73,14 @@ var pageUi = {
 					chartsUi.addPeriod(back.tradeController.tradingData, this.flags, trader.graphs);
 				}
 			}, "controlPanelListener");
+
+			back.tradeController.trader.addBuyListener(function(rate, amount){
+				chartsUi.addFlag("B", this.lastDate.getTime());
+			});
+
+			back.tradeController.trader.addSellListener(function(rate, amount){
+				chartsUi.addFlag("S", this.lastDate.getTime());
+			});
 		}
 
 		if (back.tradeController && back.tradeController.isTrading()){
@@ -105,6 +113,7 @@ var pageUi = {
 				function callback(obj) {
 					addHandleListeners();
 					self.updateControlInterfaceDisabling(back.tradeController.isTrading());
+
 					log("trading started.");
 				}
 			);
