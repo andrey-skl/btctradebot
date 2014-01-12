@@ -15,7 +15,7 @@ var init = function(){
 
 			sendResponse(tradeController);
 
-			tradeController.start(60);
+			tradeController.start(trader.timeFrame);
 		}
 		if (request.message == "stopTrading"){
 
@@ -41,3 +41,8 @@ var checkAndInit = function(){
 }
 
 checkAndInit();
+
+
+ window.onerror = function (e, url, line) {
+    log(e +" in "+ url + ":"+line);
+}

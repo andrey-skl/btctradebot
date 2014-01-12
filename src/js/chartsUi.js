@@ -117,7 +117,7 @@ var chartsUi = {
 		var chart = $('#container').highcharts();        
 		var lastDateStamp = data[data.length-1].date.getTime();
 
-        var newFlag = flags[flags.length-1].x == lastDateStamp ? flags[flags.length-1] : null;
+        var newFlag = (flags.length && flags[flags.length-1].x == lastDateStamp) ? flags[flags.length-1] : null;
 
 			var index = data.length-1;
 	        chart.series[0].addPoint(
@@ -133,10 +133,18 @@ var chartsUi = {
 	        chart.series[2].addPoint([data[index].date.getTime(),data[index].volume], false, true);
 
 	        if (lines){
-	        	var i = 3;
+	        	var i = 4;
 	        	for (var j in lines){
 	        		line = lines[j];
-	        		chart.series[i].addPoint(line[line.length-1], true, true);
+	        		var ser = chart.series[i];
+	        		if (ser){
+	        			chart.series[i].addPoint(line[line.length-1], true, true);
+	        		} else {
+	        			chart.addSeries({
+	        				name: j,
+	        				data: line,
+	        			}, true);
+	        		}
 	        		i += 1;
 	        	}
 	        }

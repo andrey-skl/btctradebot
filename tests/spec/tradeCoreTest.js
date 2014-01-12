@@ -43,7 +43,7 @@
 				cancelCalled = true;
 			});
 			
-			tr.handleNewPeriod([]);
+			tr.handleNewPeriod([{}]);
             expect(buyCalled).toBeTruthy();
 			expect(sellCalled).toBeTruthy();
 			expect(cancelCalled).toBeTruthy();

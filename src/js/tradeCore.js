@@ -43,7 +43,8 @@
 
 	window.tradeCore = function(api, strategySrc){
 		var self = this;
-
+		this.timeFrame = 3600;
+		
 		//strategySrcCode should create strategyProcessor object, constructor argument is API with standart trade interface
 		//which can contains init method and should contains handlePeriod(tradeData) method
 		//strategy can use TA-js lib
@@ -56,6 +57,7 @@
 		self.sellListeners = [];
 		self.cancelListeners = [];
 		self.graphs = {};
+
 
 		self.strategy = new strategyProcessor(new apiCallsHandler(self), self)
 		
