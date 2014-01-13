@@ -21,10 +21,19 @@
 		var self = this;
 		var intervalHandler = function(){
 			var timeSpan = new Date() - lastTimeFired;
+
 			if (timeSpan >= interval){
+
 				self.getData(timeFrameSeconds, true).then(function(res){
-					if (res[res.length-1].date.getTime() != lastDateLoaded){						
-						self.tradingData = res;
+					var newData = self.getUnprocessedPeriod(res, lastDateLoaded);
+
+					if (newData.length){
+						if (self.tradingData.length>0)
+						{
+							self.tradingData.push.apply(self.tradingData, newData);
+						} else {
+							self.tradingData = res;
+						}
 						self.trader.handleNewPeriod(res);
 						self.callAllListeners(self.handleListeners, [self.trader, res]);
 						lastDateLoaded = res[res.length-1].date.getTime();
@@ -92,6 +101,12 @@
 				x: this.lastDate.getTime(),
 				title:"S",
 			});
+		});
+	}
+
+	tradingController.prototype.getUnprocessedPeriod = function(tradingData, lastTimeStamp){
+		return _.filter(tradingData, function(t){
+			return t.date.getTime() > lastTimeStamp;
 		});
 	}
 
