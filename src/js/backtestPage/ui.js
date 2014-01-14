@@ -10,6 +10,8 @@ window.pageUi = {
 
 	    this.strategyUiInit(this.editor);
 	    this.controlUiInit();
+
+	    this.addEditorKeybindings(this.editor);
 	},
 
 	strategyUiInit: function(editor){
@@ -103,6 +105,18 @@ window.pageUi = {
 		this.selectedStrategyName = name;
 		this.selectedStrategySrc = src;
 
+	},
+
+	addEditorKeybindings: function(editor){
+		var self = this;
+		editor.commands.addCommand({
+			name: 'save',
+			bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+			exec: function(editor) {
+				$("#saveStrategy").click();
+			},
+			readOnly: false // false if this command should not apply in readOnly mode
+		});
 	},
 
 	clearLog: function(){
