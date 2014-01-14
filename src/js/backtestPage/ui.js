@@ -27,7 +27,10 @@ window.pageUi = {
 		}
 		var $list = $("#strategylist");
 		var appendToList = function(name){
-			$list.append("<li><a href='javascript:void(0)' class='iSelectStrategy' data-name='"+name+"'>"+name+"</a></li>");
+			var existingStrategy = $list.find("a[data-name='"+name+"']");
+			if (!existingStrategy.length){
+				$list.append("<li><a href='javascript:void(0)' class='iSelectStrategy' data-name='"+name+"'>"+name+"</a></li>");
+			}
 		}
 
 		for (var i in strategies){
@@ -41,12 +44,15 @@ window.pageUi = {
 			}
 		}
 
-		var setCurrentStrategy = function(name){
+		var setCurrentStrategy = function(name, dontUpdateEditor){
 			if (!name) return;
 			currentStrategyName = name;
 			$(".iCurrentStrategyName").text(name);
-			editor.setValue(strategies[name]);
-			editor.clearSelection();
+			if (!dontUpdateEditor){
+				editor.setValue(strategies[name]);
+				editor.clearSelection();				
+			}
+
 			strategyStorage.setSelected(name);
 			self.onStrategyChanged(name, strategies[name]);
 		}
@@ -60,10 +66,11 @@ window.pageUi = {
 
 		$("#saveStrategy").off("click").on("click", function(e){
 	    	var strategySrc = editor.getValue();
-	    	var name = currentStrategyName = prompt("Please name your strategy", currentStrategyName);
+	    	var name = prompt("Please name your strategy", currentStrategyName);
 	    	if (name){
+	    		currentStrategyName = name;
 	    		strategies = strategyStorage.save(name, strategySrc);
-	    		setCurrentStrategy(name);
+	    		setCurrentStrategy(name, true);
 	    		appendToList(name);
 	    	}
 	    });
