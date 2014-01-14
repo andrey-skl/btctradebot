@@ -84,8 +84,12 @@
 
 		trader.addBuyListener(function(rate, amount){
 			lastBuyPrice=rate;
-			var dateString = this.lastDate.toLocaleDateString()+" "+this.lastDate.toLocaleTimeString();
-			log(dateString+" buyed "+amount+" btc by "+rate);
+
+			log(" buyed "+amount+" by "+rate,{
+				date: this.lastDate,
+				additional: "rate="+rate,
+			}, "info");
+
 			self.flags.push({
 				x: this.lastDate.getTime(),
 				title:"B",
@@ -95,8 +99,12 @@
 		trader.addSellListener(function(rate, amount){
 			var win = rate-lastBuyPrice;
 			summ+=win;
-			var dateString = this.lastDate.toLocaleDateString()+" "+this.lastDate.toLocaleTimeString();
-			log(dateString+" selled "+amount+" by "+rate+". win is "+win+". total summ = " +summ);
+
+			log(" selled "+amount+" by "+rate+". win is "+win,{
+				date: this.lastDate,
+				additional: "summ="+summ,
+			}, win>0 ? "success" : "warning");
+
 			self.flags.push({
 				x: this.lastDate.getTime(),
 				title:"S",
@@ -114,6 +122,5 @@
 		stopped: "stopped",
 		trading: "trading",
 	}
-
 })();
 

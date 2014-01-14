@@ -14,7 +14,7 @@ $(function() {
 	pageUi.init();
 
     window.log.onNewMessage(function(logItem){
-    	pageUi.showInLog(logItem.msg)
+    	pageUi.showInLog(logItem)
     });
 
 

@@ -1,5 +1,5 @@
-
-var pageUi = {
+(function(){
+window.pageUi = {
 	init: function(){
 	    this.editor = ace.edit("editor");
 	    this.editor.setTheme("ace/theme/clouds");
@@ -106,10 +106,28 @@ var pageUi = {
 	},
 
 	clearLog: function(){
-		$("#logtext").empty();
+		$("#logBody").empty();
 	},
-	showInLog: function(msg){
-    	$("#logtext").text($("#logtext").text()+"\r\n"+msg);
+	showInLog: function(logItem){
+		var $table = $("#logBody");
+		var obj = logItem.obj;
+		var date = obj && obj.date ? obj.date : new Date();
+		var $row = $("<tr class='"+logClasses[logItem.category]+"'></tr>");
+		$row.append("<td>"+moment(date).format('DD.MM.YYYY')+"</td>");
+		$row.append("<td>"+moment(date).format('HH:mm')+"</td>");
+		$row.append("<td>"+logItem.msg+"</td>");
+		var addit = obj && obj.additional ? obj.additional : "";
+		$row.append("<td>"+addit+"</td>");
+		$table.append($row);
     },
 
 }
+
+
+	var logClasses = {
+		error: "danger text-primary",
+		info: "text-info",
+		success:"success",
+		warning:"text-warning"
+	}
+})();

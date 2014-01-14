@@ -32,8 +32,12 @@ testingControl.prototype.addListeners = function(trader){
 
 	trader.addBuyListener(function(rate, amount){
 		lastBuyPrice=rate;
-		var dateString = this.lastDate.toLocaleDateString()+" "+this.lastDate.toLocaleTimeString();
-		log(dateString+" buyed by "+rate);
+
+		log(" buyed by "+rate,{
+			date: this.lastDate,
+			additional: "rate="+rate,
+		}, "info");
+
 		self.flags.push({
 			x: this.lastDate.getTime(),
 			title:"B",
@@ -43,8 +47,10 @@ testingControl.prototype.addListeners = function(trader){
 	trader.addSellListener(function(rate, amount){
 		var win = rate-lastBuyPrice;
 		summ+=win;
-		var dateString = this.lastDate.toLocaleDateString()+" "+this.lastDate.toLocaleTimeString();
-		log(dateString+" selled by "+rate+". win is "+win+". total summ = " +summ);
+		log(" selled by "+rate+". win is "+win+". total summ = " +summ,{
+			date: this.lastDate,
+			additional: "summ="+summ,
+		}, win>0 ? "success" : "warning");
 		self.flags.push({
 			x: this.lastDate.getTime(),
 			title:"S",

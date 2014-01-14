@@ -9,6 +9,8 @@
 	<script src="../js/vendor/highstock.js"></script>
 	<script src="../js/vendor/underscore.js"></script>
 	<script src="../js/vendor/bootstrap/js/bootstrap.js"></script>
+	<script src="../js/vendor/moment-with-langs.js"></script>
+
 
 	<script src="../js/tradeCore.js"></script>
 	<script src="../js/strategyStorage.js"></script>
@@ -32,6 +34,9 @@
     	right:20px;
     	z-index: 9999;
     }
+    .font-size-small {
+	  font-size: 0.8em;
+	}
 </style>
 
 </head>
@@ -55,8 +60,18 @@
 		  <span class="glyphicon glyphicon-plus-sign"></span> Stop trading
 		</button>
 
-
-		<textarea id="logtext" rows=25></textarea>
+		<table class="table table-bordered table-condensed table-hover">
+	        <thead>
+	          <tr>
+	            <th width="100px">Date</th>
+	            <th width="100px">Time</th>
+	            <th>Message</th>
+	            <th width="20%">Additional</th>
+	          </tr>
+	        </thead>
+	        <tbody id="logBody" class="font-size-small">
+	        </tbody>
+	  	</table>
 	</div>
 
 
