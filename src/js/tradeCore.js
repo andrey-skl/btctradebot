@@ -1,46 +1,6 @@
 
 (function(){
 
-	//this object handles api calls to insert listeners call
-	var apiCallsHandler = function(trader){
-		this.buy = function(rate, amount){
-			trader.callAllListeners(trader.buyListeners, [rate, amount]);
-			return trader.api.buy(rate, amount);
-		};
-		this.buyAllByMinRate = function(recommendRate){
-			var self = this;
-			var defer = $.Deferred();
-			trader.api.status().then(function(status){
-				var last = status.last||recommendRate;
-				self.buy(last, status.balance.usd / last).then(function(res){
-					defer.resolve(res);
-				});
-			});
-			return defer.promise();
-		},
-		this.sellAllByMaxRate = function(recommendRate){
-			var self = this;
-			var defer = $.Deferred();
-			trader.api.status().then(function(status){
-				self.sell(status.last||recommendRate, status.balance.btc).then(function(res){
-					defer.resolve(res);
-				});
-			});
-			return defer.promise();
-		},
-		this.sell = function(rate, amount){
-			trader.callAllListeners(trader.sellListeners, [rate, amount]);
-			return trader.api.sell(rate, amount);
-		};
-		this.activeOrders = function(){
-			return trader.api.activeOrders();
-		};
-		this.cancel = function(order_id){
-			trader.callAllListeners(trader.cancelListeners, [order_id]);
-			return trader.api.cancelOrder(order_id);
-		};
-	}
-
 	window.tradeCore = function(api, strategySrc){
 		var self = this;
 		this.timeFrame = 3600;
@@ -58,8 +18,11 @@
 		self.cancelListeners = [];
 		self.graphs = {};
 
+		var apiHandler = new apiCallsHandler(self);
 
-		self.strategy = new strategyProcessor(new apiCallsHandler(self), self)
+		self.signalProcessor = new tradingSignalProcessor(self, apiHandler);
+
+		self.strategy = new strategyProcessor(apiHandler, self)
 		
 		if (typeof self.strategy.init == "function"){
 			self.strategy.init();
@@ -85,6 +48,14 @@
 	tradeCore.prototype.addChart = function(name){
 		this.graphs[name] = [];
 		return this.graphs[name];
+	}
+
+	tradeCore.prototype.buySignal = function(recommendRate){
+		return this.signalProcessor.processBuySignal(recommendRate);
+	}
+
+	tradeCore.prototype.sellSignal = function(recommendRate){
+		return this.signalProcessor.processSellSignal(recommendRate);
 	}
 
 	tradeCore.prototype.addBuyListener = function(fn){

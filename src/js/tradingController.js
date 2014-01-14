@@ -85,7 +85,7 @@
 		trader.addBuyListener(function(rate, amount){
 			lastBuyPrice=rate;
 
-			log(" buyed "+amount+" by "+rate,{
+			log(" bought "+amount+" by "+rate,{
 				date: this.lastDate,
 				additional: "rate="+rate,
 			}, "info");
@@ -109,6 +109,12 @@
 				x: this.lastDate.getTime(),
 				title:"S",
 			});
+		});
+
+		trader.addCancelListener(function(res){
+			log("Cant perform operation: "+res.error,{
+				date: this.lastDate,
+			}, "error");
 		});
 	}
 

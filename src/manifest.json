@@ -18,6 +18,8 @@
       "js/btceApi.js",
       "js/btceApiTradeInterface.js",
 	    "js/bitcoinwisdomApi.js",
+      "js/strategyApiCallsHandler.js",
+      "js/tradingSignalProcessor.js",
       "js/tradeCore.js",
       "js/tradingController.js",
       "js/background.js"

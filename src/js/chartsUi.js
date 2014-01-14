@@ -10,8 +10,8 @@ var chartsUi = {
 			ohlc.push([
 				data[i].date.getTime(), // the date
 				data[i].open, // open
-				data[i].max, // high
-				data[i].min, // low
+				data[i].high, // high
+				data[i].low, // low
 				data[i].close // close
 			]);
 			
@@ -125,8 +125,8 @@ var chartsUi = {
 	        chart.series[0].addPoint(
 	        	[data[index].date.getTime(),
 	        	data[index].open, // open
-				data[index].max, // high
-				data[index].min, // low
+				data[index].high, // high
+				data[index].low, // low
 				data[index].close 
 	        	], false, true);
 

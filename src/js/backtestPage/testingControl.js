@@ -33,7 +33,7 @@ testingControl.prototype.addListeners = function(trader){
 	trader.addBuyListener(function(rate, amount){
 		lastBuyPrice=rate;
 
-		log(" buyed by "+rate,{
+		log(" bought by "+rate,{
 			date: this.lastDate,
 			additional: "rate="+rate,
 		}, "info");

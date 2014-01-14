@@ -28,8 +28,8 @@
 					date : new Date(row[DATE_INDEX]*1000),
 					open: row[OPEN_INDEX],
 					close: row[CLOSE_INDEX],
-					min: row[MIN_INDEX],
-					max: row[MAX_INDEX],
+					low: row[MIN_INDEX],
+					high: row[MAX_INDEX],
 					volume: row[VOLUME_INDEX],
 				})
 			}
