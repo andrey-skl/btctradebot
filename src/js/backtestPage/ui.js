@@ -4,6 +4,9 @@ window.pageUi = {
 	    this.editor = ace.edit("editor");
 	    this.editor.setTheme("ace/theme/clouds");
 	    this.editor.getSession().setMode("ace/mode/javascript");
+	    this.editor.setAutoScrollEditorIntoView();
+		this.editor.setOption("maxLines", 150);
+		this.editor.setOption("minLines", 2);
 	    
 	    this.selectedStrategyName = null;
 	    this.selectedStrategySrc = null;
