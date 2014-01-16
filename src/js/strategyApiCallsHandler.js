@@ -12,7 +12,8 @@ window.apiCallsHandler = function(trader){
 		var defer = $.Deferred();
 		trader.api.status().then(function(status){
 			var last = status.last||recommendRate;
-			self.buy(last, status.balance.usd / last).then(function(res){
+			var amount = status.balance.usd / last;
+			self.buy(last, amount - amount*trader.api.fee).then(function(res){
 				defer.resolve(res);
 			});
 		});
@@ -22,7 +23,7 @@ window.apiCallsHandler = function(trader){
 		var self = this;
 		var defer = $.Deferred();
 		trader.api.status().then(function(status){
-			self.sell(status.last||recommendRate, status.balance.btc).then(function(res){
+			self.sell(status.last||recommendRate, status.balance.btc-(status.balance.btc*trader.api.fee) ).then(function(res){
 				defer.resolve(res);
 			});
 		});

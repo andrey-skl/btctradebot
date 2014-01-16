@@ -1,10 +1,12 @@
 
 window.fakeAPI = function(startBalance){
+	this.fee =  0.002;
 	this.fakeBalance = {
 		btc: startBalance.btc || 0,
 		usd: startBalance.usd || 1000,
 	};
 }
+
 
 fakeAPI.prototype.status = function(){
 	var defer = $.Deferred();
@@ -24,7 +26,7 @@ fakeAPI.prototype.activeOrders = function(){
 fakeAPI.prototype.sell = function(rate, amount){
 	var defer = $.Deferred();
 	this.fakeBalance.btc -= amount;
-	this.fakeBalance.usd += rate*amount;
+	this.fakeBalance.usd += rate*amount + rate*amount*this.fee;
 	defer.resolve("test_id");
 	return defer.promise();
 }
@@ -32,7 +34,7 @@ fakeAPI.prototype.sell = function(rate, amount){
 fakeAPI.prototype.buy = function(rate, amount){
 	var defer = $.Deferred();
 	this.fakeBalance.btc += amount;
-	this.fakeBalance.usd -= rate*amount;
+	this.fakeBalance.usd -= (rate*amount + rate*amount*this.fee);
 	defer.resolve("test_id");
 	return defer.promise();
 }

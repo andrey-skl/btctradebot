@@ -7,12 +7,32 @@
 	}
 
 	backTester.prototype.test = function(){
+		var self = this;
+		var defer = $.Deferred();
 		var data = [];
-		for (var i in this.tradeData){
-			var row = this.tradeData[i];
+		var i = 0;
+		var len = this.tradeData.length;
+
+		var processPeriod = function(){
+			var row = self.tradeData[i];
 			data.push(row);
-			this.trader.handleNewPeriod(data);
+			self.trader.handleNewPeriod(data);
+
+			self.onPeriodHandled();
+			i++;
+			if (i<len){
+				setTimeout(processPeriod, 1);
+			} else {
+				defer.resolve();
+			}
 		}
+
+		processPeriod();
+
+		return defer.promise();
+	}
+	backTester.prototype.onPeriodHandled = function(){
+
 	}
 
 })();

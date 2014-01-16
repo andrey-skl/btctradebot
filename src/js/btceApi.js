@@ -6,6 +6,7 @@
 var btceAPI = function (options) {
     this.hostUrl = "https://btc-e.com";
 	this.nonce = 0;
+	this.fee=0.002;
 	this.apiPath = "/tapi";
 	
 	jQuery.extend(this, options);

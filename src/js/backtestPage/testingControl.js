@@ -15,13 +15,14 @@ testingControl.prototype.testStrategy = function(getTableFn, testStrategy){
 		var tester = new backTester(data, trader);
 		log("Start backtest trading. Start balance: BTC="+fakeApi.fakeBalance.btc+", USD="+
 			fakeApi.fakeBalance.usd+", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close));
-		
-		tester.test();
 
-		log("Finish backtesting. End balance: BTC="+fakeApi.fakeBalance.btc+", USD="+fakeApi.fakeBalance.usd+
+		tester.test().then(function(){
+			log("Finish backtesting. End balance: BTC="+fakeApi.fakeBalance.btc+", USD="+fakeApi.fakeBalance.usd+
 			", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close))
 
-		chartsUi.makeCharts(data, self.flags, trader.graphs);
+			chartsUi.makeCharts(data, self.flags, trader.graphs);
+		});
+
 	})
 }
 
@@ -37,7 +38,7 @@ testingControl.prototype.addListeners = function(trader){
 	trader.addBuyListener(function(rate, amount){
 		lastBuyPrice=rate;
 
-		log(" bought by "+rate,{
+		log(" bought "+amount+" by "+rate,{
 			date: this.lastDate,
 			additional: "rate="+rate,
 		}, "info");
@@ -51,7 +52,7 @@ testingControl.prototype.addListeners = function(trader){
 	trader.addSellListener(function(rate, amount){
 		var win = rate-lastBuyPrice;
 		summ+=win;
-		log(" selled by "+rate+". win is "+win+". total summ = " +summ,{
+		log(" selled "+amount+" by "+rate+". win is "+win+". total summ = " +summ,{
 			date: this.lastDate,
 			additional: "summ="+summ,
 		}, win>0 ? "success" : "warning");
