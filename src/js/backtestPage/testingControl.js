@@ -2,23 +2,27 @@ var testingControl = function(){
 	this.flags = [];
 }
 
-testingControl.prototype.testStrategy = function(data, testStrategy){
+testingControl.prototype.testStrategy = function(getTableFn, testStrategy){
+	var self = this;
 	var fakeApi = new fakeAPI({btc:0, usd:1000});
 	
 	var trader = new tradeCore(fakeApi, testStrategy);
 
-	this.addListeners(trader);
+	self.addListeners(trader);
 
-	var tester = new backTester(table, trader);
-	log("Start backtest trading. Start balance: BTC="+fakeApi.fakeBalance.btc+", USD="+
-		fakeApi.fakeBalance.usd+", equal "+this.getUSDequivalent(fakeApi.fakeBalance, table[table.length-1].close));
-	
-	tester.test();
+	log("Loading trading data...");
+	getTableFn(trader.timeFrame, false).then(function(data){
+		var tester = new backTester(data, trader);
+		log("Start backtest trading. Start balance: BTC="+fakeApi.fakeBalance.btc+", USD="+
+			fakeApi.fakeBalance.usd+", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close));
+		
+		tester.test();
 
-	log("Finish backtesting. End balance: BTC="+fakeApi.fakeBalance.btc+", USD="+fakeApi.fakeBalance.usd+
-		", equal "+this.getUSDequivalent(fakeApi.fakeBalance, table[table.length-1].close))
+		log("Finish backtesting. End balance: BTC="+fakeApi.fakeBalance.btc+", USD="+fakeApi.fakeBalance.usd+
+			", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close))
 
-	chartsUi.makeCharts(table, this.flags, trader.graphs);
+		chartsUi.makeCharts(data, self.flags, trader.graphs);
+	})
 }
 
 testingControl.prototype.getUSDequivalent = function(balance, lastAmount){

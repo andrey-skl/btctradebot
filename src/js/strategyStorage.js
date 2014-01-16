@@ -25,6 +25,9 @@ var strategyStorage = {
 		localStorage.strategies = JSON.stringify(strategies);
 		return strategies;
 	},
+	get: function(name){
+		return this.load()[name];
+	},
 	setSelected: function(name){
 		localStorage.selectedStrategy = name;
 	},

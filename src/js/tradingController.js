@@ -115,6 +115,11 @@
 			log("Cant perform operation: "+res.error,{
 				date: this.lastDate,
 			}, "error");
+
+			self.flags.push({
+				x: this.lastDate.getTime(),
+				title:"C",
+			});
 		});
 	}
 

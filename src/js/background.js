@@ -13,13 +13,13 @@ var init = function(){
 			var trader = new tradeCore(api, request.selectedStrategySrc);
 			tradeController = new tradingController(trader, bitcoinwisdomApi.getBtceBtcUsdChart);
 
-			sendResponse(tradeController);
+			sendResponse("ok");
 
 			tradeController.start(trader.timeFrame);
 		}
 		if (request.message == "stopTrading"){
 
-			sendResponse(tradeController);
+			sendResponse("ok");
 			tradeController.stop();
 		}
 	});

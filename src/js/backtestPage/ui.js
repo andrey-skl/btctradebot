@@ -18,6 +18,10 @@ window.pageUi = {
 	},
 
 	strategyUiInit: function(editor){
+	    if (!strategyStorage.get("EMA3-EMA10")){
+	    	strategyStorage.save("EMA3-EMA10", $("#defaultStrategy").text());
+	    }
+	    
 		var self = this;
 		var strategies = strategyStorage.load();
 
@@ -94,8 +98,7 @@ window.pageUi = {
 		$("#testSelectedStrategy").on("click", function(e){
 			var testingController = new testingControl();
 			self.clearLog();
-			//todo: replace back.table to dynamic datasource
-			testingController.testStrategy(back.table, self.selectedStrategySrc);
+			testingController.testStrategy(back.bitcoinwisdomApi.getBtceBtcUsdChart, self.selectedStrategySrc);
 		});
 
 		var isChartHidden = false;
