@@ -16,14 +16,15 @@ testingControl.prototype.testStrategy = function(getTableFn, testStrategy){
 		log("Start backtest trading. Start balance: BTC="+fakeApi.fakeBalance.btc+", USD="+
 			fakeApi.fakeBalance.usd+", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close));
 
-		tester.test().then(function(){
-			log("Finish backtesting. End balance: BTC="+fakeApi.fakeBalance.btc+", USD="+fakeApi.fakeBalance.usd+
-			", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close))
 
-			chartsUi.makeCharts(data, self.flags, trader.graphs);
-		});
+		tester.test();
+		 
+		log("Finish backtesting. End balance: BTC="+fakeApi.fakeBalance.btc+", USD="+fakeApi.fakeBalance.usd+
+		", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close));
 
-	})
+		chartsUi.makeCharts(data, self.flags, trader.graphs);
+
+	});
 }
 
 testingControl.prototype.getUSDequivalent = function(balance, lastAmount){
