@@ -40,7 +40,7 @@ testingControl.prototype.addListeners = function(trader){
 
 		log(" bought "+amount+" by "+rate,{
 			date: this.lastDate,
-			additional: "rate="+rate,
+			additional: "rate="+rate+", fee=$"+(rate*amount*trader.api.fee).toFixed(4),
 		}, "info");
 
 		self.flags.push({
@@ -54,7 +54,7 @@ testingControl.prototype.addListeners = function(trader){
 		summ+=win;
 		log(" selled "+amount+" by "+rate+". win is "+win+". total summ = " +summ,{
 			date: this.lastDate,
-			additional: "summ="+summ,
+			additional: "summ="+summ+", fee=$"+(rate*amount*trader.api.fee).toFixed(4),
 		}, win>0 ? "success" : "warning");
 		self.flags.push({
 			x: this.lastDate.getTime(),
