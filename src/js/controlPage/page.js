@@ -5,13 +5,6 @@ window.log = back.log;
 $(function() {
 
 	pageUi.init();
-
-    log.onNewMessage(function(logItem){
-    	pageUi.showInLog(logItem);
-    });
-
-
-
 });
 
 

@@ -43,6 +43,8 @@
 						console.warn("Last date loaded is same. Repeating");
 					}
 
+				}, function (err){
+					log(err, null, "error");
 				});
 			}
 		};
@@ -88,7 +90,7 @@
 			log(" bought "+amount+" by "+rate,{
 				date: this.lastDate,
 				additional: "rate="+rate,
-			}, "info");
+			}, "info", "buy");
 
 			self.flags.push({
 				x: this.lastDate.getTime(),
@@ -103,7 +105,7 @@
 			log(" selled "+amount+" by "+rate+". win is "+win,{
 				date: this.lastDate,
 				additional: "summ="+summ,
-			}, win>0 ? "success" : "warning");
+			}, win>0 ? "success" : "warning", "sell");
 
 			self.flags.push({
 				x: this.lastDate.getTime(),

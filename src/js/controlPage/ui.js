@@ -7,6 +7,24 @@ window.pageUi = {
 
 	    this.strategyUiInit();
 	    this.controlUiInit();
+
+        log.onNewMessage(function(logItem){
+	    	pageUi.showInLog(logItem);
+
+	    	if (logItem.type == "buy"){
+                webkitNotifications.createNotification(
+                  'img/128.png',
+                  'Buy notification '+ logItem.obj.date.toTimeString().substr(0,8),
+                  logItem.msg
+                ).show();
+	    	} else if (logItem.type == "sell"){
+                webkitNotifications.createNotification(
+                  'img/128.png',
+                  'Sell notification '+ logItem.obj.date.toTimeString().substr(0,8),
+                  logItem.msg
+                ).show();
+	    	}
+	    });
 	},
 
 	strategyUiInit: function(){
@@ -117,7 +135,7 @@ window.pageUi = {
 					addHandleListeners();
 					self.updateControlInterfaceDisabling(back.tradeController.isTrading());
 
-					log("trading started.");
+					log("trading started.",{date:new Date()});
 				}
 			);
 		});
@@ -129,7 +147,7 @@ window.pageUi = {
 				}, 
 				function callback(obj) {
 					self.updateControlInterfaceDisabling(back.tradeController.isTrading());
-					log("trading stopped.");
+					log("trading stopped.",{date:new Date()});
 				}
 			);
 		});
