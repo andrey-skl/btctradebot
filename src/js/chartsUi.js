@@ -43,10 +43,17 @@ var chartsUi = {
 		    }];
 
 		for (var i in lines){
-			series.push({
-				name:i,
-				data: lines[i].slice(),
-			})
+			if (i.indexOf("_axis")==-1){
+				var serie = {
+					name: i,
+					data: lines[i].slice(),
+				};
+				if (lines[i+"_axis"]=="bottom"){
+					serie.yAxis = 2;
+				}
+				series.push(serie)				
+			}
+
 		}
 
 
@@ -83,6 +90,14 @@ var chartsUi = {
 		    }, {
 		        title: {
 		            text: 'Volume'
+		        },
+		        top: 350,
+		        height: 50,
+		        offset: 0,
+		        lineWidth: 2
+		    },{
+		        title: {
+		            text: ''
 		        },
 		        top: 350,
 		        height: 50,

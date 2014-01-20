@@ -33,11 +33,13 @@ testingControl.prototype.getUSDequivalent = function(balance, lastAmount){
 
 testingControl.prototype.addListeners = function(trader){
 	var self = this;
-	var lastBuyPrice = 0;
+	var lastTotalBalance = 0;
 	var summ = 0;
+	var fakeApi = trader.api;
 
 	trader.addBuyListener(function(rate, amount){
-		lastBuyPrice=rate;
+		amount *= fakeApi.feeKoef;
+		lastTotalBalance =fakeApi.fakeBalance.getTotal(rate);
 
 		log(" bought "+amount+" by "+rate,{
 			date: this.lastDate,
@@ -51,11 +53,11 @@ testingControl.prototype.addListeners = function(trader){
 	});
 
 	trader.addSellListener(function(rate, amount){
-		var win = rate-lastBuyPrice;
+		var win = fakeApi.fakeBalance.getTotal(rate)-lastTotalBalance;
 		summ+=win;
-		log(" selled "+amount+" by "+rate+". win is "+win+". total summ = " +summ,{
+		log(" selled "+amount+" by "+rate+". win is $"+win+". total summ = " +summ,{
 			date: this.lastDate,
-			additional: "summ="+summ+", fee=$"+(rate*amount*trader.api.fee).toFixed(4),
+			additional: "total=$"+fakeApi.fakeBalance.getTotal(rate)+", fee=$"+(rate*amount*trader.api.fee).toFixed(4),
 		}, win>0 ? "success" : "warning");
 		self.flags.push({
 			x: this.lastDate.getTime(),

@@ -44,7 +44,7 @@
 					}
 
 				}, function (err){
-					log(err, null, "error");
+					log(err.status + err.statusText, null, "error");
 				});
 			}
 		};

@@ -13,9 +13,8 @@ window.apiCallsHandler = function(trader){
 		trader.api.status().then(function(status){
 			var last = status.last||recommendRate;
 			var amount = status.balance.usd / last;
-			amount -= amount*trader.api.fee;
-			amount = parseFloat(amount.toFixed(8)); //округляем
-			self.buy(last, amount - amount*trader.api.fee).then(function(res){
+			amount = amount.toFixed(7); //округляем
+			self.buy(last, amount).then(function(res){
 				defer.resolve(res);
 			});
 		});
@@ -25,9 +24,9 @@ window.apiCallsHandler = function(trader){
 		var self = this;
 		var defer = $.Deferred();
 		trader.api.status().then(function(status){
-			amount = status.balance.btc-(status.balance.btc*trader.api.fee);
-			amount = parseFloat(amount.toFixed(4)); //округляем
-			self.sell(status.last||recommendRate, status.balance.btc-(status.balance.btc*trader.api.fee) ).then(function(res){
+			amount = status.balance.btc;
+			amount = amount.toFixed(7); //округляем
+			self.sell(status.last||recommendRate, amount ).then(function(res){
 				defer.resolve(res);
 			});
 		});

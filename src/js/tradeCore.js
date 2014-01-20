@@ -45,8 +45,9 @@
 		}
 	}
 
-	tradeCore.prototype.addChart = function(name){
+	tradeCore.prototype.addChart = function(name, axis){
 		this.graphs[name] = [];
+		this.graphs[name+"_axis"]=axis;
 		return this.graphs[name];
 	}
 
