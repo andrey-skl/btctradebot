@@ -13,22 +13,28 @@ testingControl.prototype.testStrategy = function(getTableFn, testStrategy){
 	log("Loading trading data...");
 	getTableFn(trader.timeFrame, false).then(function(data){
 		var tester = new backTester(data, trader);
+		var startTotal = fakeApi.fakeBalance.getTotal( data[0].close);
 		log("Start backtest trading. Start balance: BTC="+fakeApi.fakeBalance.btc+", USD="+
-			fakeApi.fakeBalance.usd+", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close));
+			fakeApi.fakeBalance.usd+", equal "+startTotal);
 
 
 		tester.test();
 		 
 		log("Finish backtesting. End balance: BTC="+fakeApi.fakeBalance.btc+", USD="+fakeApi.fakeBalance.usd+
-		", equal "+self.getUSDequivalent(fakeApi.fakeBalance, data[data.length-1].close));
+		", equal "+fakeApi.fakeBalance.getTotal( data[data.length-1].close))	;
+
+		if (fakeApi.fakeBalance.getTotal( data[data.length-1].close) > startTotal){
+			webkitNotifications.createNotification(
+                  'img/128.png',
+                  'Win!',
+                  "Congratulations! Your strategy is good!"
+            ).show();			
+		}
+
 
 		chartsUi.makeCharts(data, self.flags, trader.graphs);
 
 	});
-}
-
-testingControl.prototype.getUSDequivalent = function(balance, lastAmount){
-	return balance.usd + balance.btc*lastAmount;
 }
 
 testingControl.prototype.addListeners = function(trader){

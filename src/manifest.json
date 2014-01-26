@@ -22,6 +22,7 @@
       "js/tradingSignalProcessor.js",
       "js/tradeCore.js",
       "js/tradingController.js",
+      "js/payApi.js",
       "js/background.js"
     ]
   },
@@ -30,6 +31,7 @@
     "notifications", 
 	   "background",
      "storage",
+     "identity",
     "https://btc-e.com/*",
 	"http://s2.bitcoinwisdom.com/*"
   ],
@@ -39,6 +41,13 @@
 	  "default_icon": "img/icon128.png",
     "default_popup": "html/popup.html"
 	},
+
+  "oauth2": {
+    "client_id": "897218221749-q9mbsu8d6oeuehif8eb1n64v5o6hssdb.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
+  },
 
   "options_page": "html/settings.html",
 

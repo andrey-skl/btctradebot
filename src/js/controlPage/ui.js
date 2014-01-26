@@ -124,6 +124,12 @@ window.pageUi = {
 		}
 
 		$("#startTradging").on("click", function(e){
+
+			var isBought = localStorage.isBought;
+			if (!isBought){
+				$('#buyModal').modal({show:true});
+				return false;
+			}
 			self.clearLog();
 
 			chrome.extension.sendRequest(

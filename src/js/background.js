@@ -6,6 +6,16 @@ var init = function(){
 		secret: localStorage.secret,
 	});
 
+	window.paymentApi = new payApi();
+	function checkIsBought (){
+		paymentApi.isBought().then(function(isBought){
+			localStorage.isBought = isBought;
+		});
+	}
+	checkIsBought();
+	setTimeout(checkIsBought, 1000*60*10);
+
+
 	window.tradeController = null;
 
 	chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
