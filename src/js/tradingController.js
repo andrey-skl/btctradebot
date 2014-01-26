@@ -102,7 +102,7 @@
 			var win = rate-lastBuyPrice;
 			summ+=win;
 
-			log(" selled "+amount+" by "+rate+". win is "+win,{
+			log(" sold "+amount+" by "+rate+". win is "+win,{
 				date: this.lastDate,
 				additional: "summ="+summ,
 			}, win>0 ? "success" : "warning", "sell");

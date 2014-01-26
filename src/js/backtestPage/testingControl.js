@@ -25,7 +25,7 @@ testingControl.prototype.testStrategy = function(getTableFn, testStrategy){
 
 		if (fakeApi.fakeBalance.getTotal( data[data.length-1].close) > startTotal){
 			webkitNotifications.createNotification(
-                  'img/128.png',
+                  '/img/128.png',
                   'Win!',
                   "Congratulations! Your strategy is good!"
             ).show();			
@@ -61,7 +61,7 @@ testingControl.prototype.addListeners = function(trader){
 	trader.addSellListener(function(rate, amount){
 		var win = fakeApi.fakeBalance.getTotal(rate)-lastTotalBalance;
 		summ+=win;
-		log(" selled "+amount+" by "+rate+". win is $"+win+". total summ = " +summ,{
+		log(" sold "+amount+" by "+rate+". win is $"+win+". total summ = " +summ,{
 			date: this.lastDate,
 			additional: "total=$"+fakeApi.fakeBalance.getTotal(rate)+", fee=$"+(rate*amount*trader.api.fee).toFixed(4),
 		}, win>0 ? "success" : "warning");
