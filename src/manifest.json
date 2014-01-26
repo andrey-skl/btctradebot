@@ -33,7 +33,9 @@
      "storage",
      "identity",
     "https://btc-e.com/*",
-	"http://s2.bitcoinwisdom.com/*"
+	"http://s2.bitcoinwisdom.com/*",
+  "https://www.googleapis.com/*",
+  "http://btc-tradebot.herokuapp.com/*"
   ],
 	"browser_action": {
       "default_name": "__MSG_extName__",

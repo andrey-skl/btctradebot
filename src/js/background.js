@@ -9,7 +9,11 @@ var init = function(){
 	window.paymentApi = new payApi();
 	function checkIsBought (){
 		paymentApi.isBought().then(function(isBought){
-			localStorage.isBought = isBought;
+			if (isBought){
+				localStorage.isBought = true;
+			} else {
+				localStorage.removeItem("isBought");
+			}
 		});
 	}
 	checkIsBought();

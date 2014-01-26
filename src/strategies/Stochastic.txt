@@ -1,0 +1,75 @@
+//Stochastic strategy from Huston007
+var strategyProcessor = function(api, trader){
+        var STOHASTIC_PERIOD = 20;
+		var pauseLength = 5;
+		var iterator = pauseLength;
+		var isBought = false;
+		var lastBuyPrice = 0;
+		var lastPrice=null;
+		var stopLoss = 4;
+		var takeProfit = 10;
+		var stohastic = trader.addChart('Stohastic', "bottom");
+		
+		var calcStohastic = function(data, period){
+		    var len = data.length;
+		    if (len<period)
+		    {
+		        return null;
+		    }
+		    var Ct = data[len-1].close;
+		    var minArray = data.slice(len-period).map(function(item){
+		        return item.low;
+		    });
+		    var maxArray = data.slice(len-period).map(function(item){
+		        return item.high;
+		    });
+		    var Ln = _.min(minArray);
+		    var Hn = _.max(maxArray);
+		    return (Ct-Ln)/(Hn-Ln)*100;
+		}
+		
+		trader.timeFrame = 60;
+		
+		this.sell = function(){
+            trader.sellSignal(lastPrice).then(function(){
+                isBought = false;
+                iterator=pauseLength;
+            });
+		}
+		
+		this.buy = function(){
+            trader.buySignal(lastPrice).then(function(){
+                isBought = true;
+                iterator=pauseLength;
+                lastBuyPrice = lastPrice;               
+            });
+		}
+		
+		this.handlePeriod= function(tradeData){
+			if (iterator>0)
+				iterator--;
+			lastPrice = tradeData[tradeData.length-1].close;
+			var lastDate = tradeData[tradeData.length-1];
+			
+			var prevSt = calcStohastic(tradeData.slice(0,tradeData.length-1), STOHASTIC_PERIOD);
+			var st = calcStohastic(tradeData, STOHASTIC_PERIOD);
+			
+			stohastic.push([trader.lastDate.getTime(), st]);
+			
+			if (!isBought && prevSt<20 && st > 20){
+			    this.buy();
+			}
+			if (isBought && prevSt>80 && st < 80){
+			    this.sell();
+			}
+			
+			if (isBought && lastPrice<lastBuyPrice-stopLoss){
+				log('stopLoss shouted!!!',trader.lastDate);
+				this.sell();
+			}
+			if (isBought && lastPrice>lastBuyPrice+takeProfit){
+				log('takeProfit shouted!!!',trader.lastDate);
+				this.sell();
+			}
+		};	
+	};

@@ -1,6 +1,7 @@
 (function(){
 window.pageUi = {
 	init: function(){
+		var self = this;
 	    this.editor = ace.edit("editor");
 	    this.editor.setTheme("ace/theme/clouds");
 	    this.editor.getSession().setMode("ace/mode/javascript");
@@ -11,23 +12,16 @@ window.pageUi = {
 	    this.selectedStrategyName = null;
 	    this.selectedStrategySrc = null;
 
-	    this.strategyUiInit(this.editor);
+		self.loadDefaultStrategies().then(function(){
+			self.strategyUiInit(self.editor);
+		})
+
 	    this.controlUiInit();
 
 	    this.addEditorKeybindings(this.editor);
 	},
 
 	strategyUiInit: function(editor){
-	    if (!strategyStorage.get("EMA3-EMA10")){
-	    	strategyStorage.save("EMA3-EMA10", $("#ema3-ema10").text());
-	    }
-	    if (!strategyStorage.get("four-emas")){
-	    	strategyStorage.save("four-emas", $("#fourEmas").text());
-	    }
-	    if (!strategyStorage.get("Stochastic")){
-	    	strategyStorage.save("Stochastic", $("#stohastic").text());
-	    }
-	    
 		var self = this;
 		var strategies = strategyStorage.load();
 
@@ -153,6 +147,33 @@ window.pageUi = {
 		$row.append("<td>"+addit+"</td>");
 		$table.append($row);
     },
+
+    loadDefaultStrategies : function(){
+    	var defer = $.Deferred();
+    	var hasEMA3 = strategyStorage.get("EMA3-EMA10");
+    	var hasFourEmas = strategyStorage.get("EMA3-EMA10");
+    	var hasStochastic = strategyStorage.get("Stochastic");
+
+    	if (hasEMA3 && hasStochastic && hasFourEmas){
+    		defer.resolve();
+    	} else{
+    		setTimeout(function(){
+	    		if (!hasEMA3){
+		    		strategyStorage.save("EMA3-EMA10", $("#ema3-ema10").contents().text());
+			    }
+			    if (!hasFourEmas){
+			    	strategyStorage.save("four-emas", $("#fourEmas").contents().text());
+			    }
+			    if (!hasStochastic){
+			    	strategyStorage.save("Stochastic", $("#stochastic").contents().text());
+			    }
+			    defer.resolve();
+    		}, 200);
+
+    	}
+	    
+	    return defer.promise();
+    }
 
 }
 
