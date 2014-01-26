@@ -113,7 +113,8 @@
 </div>
 
 <div>
-	<pre id="defaultStrategy" style="display:none;">
+	<pre id="ema3-ema10" style="display:none;">
+	//EMA3-EMA10 strategy from Huston007
 var strategyProcessor = function(api, trader){
 		var pauseLength = 5;
 		var iterator = pauseLength;
@@ -187,6 +188,204 @@ var strategyProcessor = function(api, trader){
 						this.sell();
 					}
 				}
+			}
+			
+			if (isBought && lastPrice<lastBuyPrice-stopLoss){
+				log('stopLoss shouted!!!',trader.lastDate);
+				this.sell();
+			}
+			if (isBought && lastPrice>lastBuyPrice+takeProfit){
+				log('takeProfit shouted!!!',trader.lastDate);
+				this.sell();
+			}
+		};	
+	};
+	</pre>
+	<pre id="fourEmas" style="display:none;">
+	//four emas strategy from Huston007
+	var strategyProcessor = function(api, trader){
+		var pauseLength = 8;
+		var iterator = pauseLength;
+		var isBought = false;
+		var summ = 0;
+		var lastBuyPrice = 0;
+		var lastPrice=null;
+		var stopLoss = 4;
+		var takeProfit = 40;
+		var longPeriod = 34;
+		var shortPeriod = 12;
+		var emaHighGraph = trader.addChart('EMA long high');
+		var emaLowGraph = trader.addChart('EMA long low');
+		var emaCloseGraph = trader.addChart('EMA long close');
+		var emaFastGraph = trader.addChart('EMA short close');
+		
+		trader.timeFrame = 3600;
+		
+		this.sell = function(){
+
+            trader.sellSignal(lastPrice).then(function(){
+                isBought = false;
+                iterator=pauseLength;
+            });
+		}
+		
+		this.buy = function(){
+
+            trader.buySignal(lastPrice).then(function(){
+                isBought = true;
+                iterator=pauseLength;
+                lastBuyPrice = lastPrice;               
+            });
+		}
+		
+		this.handlePeriod= function(tradeData){
+			if (iterator>0)
+				iterator--;
+			lastPrice = tradeData[tradeData.length-1].close;
+			var lastDate = tradeData[tradeData.length-1];
+			var closedPrices = [], lowPrices=[], highPrices=[];
+			for (var i in tradeData){
+				closedPrices.push(tradeData[i].close);
+				lowPrices.push(tradeData[i].low);
+				highPrices.push(tradeData[i].high);
+			}
+
+			var lastEmaLength = 14;
+			var ema34high = TA.EMAverage(highPrices, longPeriod);
+			var ema34low = TA.EMAverage(lowPrices, longPeriod);
+			var ema34close = TA.EMAverage(closedPrices, longPeriod);
+			var ema12close = TA.EMAverage(closedPrices, shortPeriod);
+
+			var lastEmas = [];
+			/*filling last emas*/	
+			for (var i=0; i<lastEmaLength; i++ ){
+				lastEmas.push({
+					ema34high: ema34high[ema34high.length -longPeriod -lastEmaLength+ i+1 ],
+					ema34low: ema34low[ema34low.length -longPeriod -lastEmaLength+ i+1 ],
+					ema34close: ema34close[ema34close.length -longPeriod -lastEmaLength+ i+1 ],
+					ema12close: ema12close[ema12close.length -shortPeriod -lastEmaLength+ i+1 ],
+				});
+			}	
+			var dt = trader.lastDate.getTime();
+    		
+			emaHighGraph.push([dt,lastEmas[lastEmas.length-1].ema34high]);
+			emaLowGraph.push([dt,lastEmas[lastEmas.length-1].ema34low]);
+			emaCloseGraph.push([dt,lastEmas[lastEmas.length-1].ema34close]);
+			emaFastGraph.push([dt,lastEmas[lastEmas.length-1].ema12close]);
+			/*searching upper cross*/
+			
+			var lastVal = lastEmas[lastEmas.length-1]
+			
+			var isLastPotinInTop = lastVal.ema12close > lastVal.ema34high &&
+			    lastVal.ema12close > lastVal.ema34low &&
+			    lastVal.ema12close > lastVal.ema34close;
+			var isLastPointInBottom = lastVal.ema12close < lastVal.ema34high &&
+			    lastVal.ema12close < lastVal.ema34low &&
+			    lastVal.ema12close < lastVal.ema34close;
+			    
+			var hasPointWithLastInTop, hasPointWithLastInBottom;
+			_.map(lastEmas, function(val){
+			    if (val.ema12close < val.ema34high &&
+			    val.ema12close < val.ema34low &&
+			    val.ema12close < val.ema34close)
+			    {
+			        hasPointWithLastInBottom = true;
+			    }
+			    if (val.ema12close > val.ema34high &&
+			    val.ema12close > val.ema34low &&
+			    val.ema12close > val.ema34close)
+			    {
+			        hasPointWithLastInTop = true;
+			    }
+			});
+			     
+			if (isLastPotinInTop && hasPointWithLastInBottom){
+			    if (iterator==0 && !isBought) {
+						this.buy();
+					}
+			}
+			
+			if (isLastPointInBottom && hasPointWithLastInTop){
+			    if (iterator==0 && isBought) {
+						this.sell();
+					}
+			}
+
+			if (isBought && lastPrice<lastBuyPrice-stopLoss){
+				log('stopLoss shouted!!!',trader.lastDate);
+				this.sell();
+			}
+			if (isBought && lastPrice>lastBuyPrice+takeProfit){
+				log('takeProfit shouted!!!',trader.lastDate);
+				this.sell();
+			}
+		};	
+	};
+	</pre>
+	<pre id="stohastic" style="display:none;">
+//Stochastic strategy from Huston007
+var strategyProcessor = function(api, trader){
+        var STOHASTIC_PERIOD = 20;
+		var pauseLength = 5;
+		var iterator = pauseLength;
+		var isBought = false;
+		var lastBuyPrice = 0;
+		var lastPrice=null;
+		var stopLoss = 4;
+		var takeProfit = 10;
+		var stohastic = trader.addChart('Stohastic', "bottom");
+		
+		var calcStohastic = function(data, period){
+		    var len = data.length;
+		    if (len<period)
+		    {
+		        return null;
+		    }
+		    var Ct = data[len-1].close;
+		    var minArray = data.slice(len-period).map(function(item){
+		        return item.low;
+		    });
+		    var maxArray = data.slice(len-period).map(function(item){
+		        return item.high;
+		    });
+		    var Ln = _.min(minArray);
+		    var Hn = _.max(maxArray);
+		    return (Ct-Ln)/(Hn-Ln)*100;
+		}
+		
+		trader.timeFrame = 60;
+		
+		this.sell = function(){
+            trader.sellSignal(lastPrice).then(function(){
+                isBought = false;
+                iterator=pauseLength;
+            });
+		}
+		
+		this.buy = function(){
+            trader.buySignal(lastPrice).then(function(){
+                isBought = true;
+                iterator=pauseLength;
+                lastBuyPrice = lastPrice;               
+            });
+		}
+		
+		this.handlePeriod= function(tradeData){
+			if (iterator>0)
+				iterator--;
+			lastPrice = tradeData[tradeData.length-1].close;
+			var lastDate = tradeData[tradeData.length-1];
+			
+			var prevSt = calcStohastic(tradeData.slice(0,tradeData.length-1), STOHASTIC_PERIOD);
+			var st = calcStohastic(tradeData, STOHASTIC_PERIOD);
+			
+			stohastic.push([trader.lastDate.getTime(), st]);
+			
+			if (!isBought && prevSt<20 && st > 20){
+			    this.buy();
+			}
+			if (isBought && prevSt>80 && st < 80){
+			    this.sell();
 			}
 			
 			if (isBought && lastPrice<lastBuyPrice-stopLoss){

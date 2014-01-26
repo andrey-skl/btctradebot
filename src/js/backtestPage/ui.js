@@ -19,7 +19,13 @@ window.pageUi = {
 
 	strategyUiInit: function(editor){
 	    if (!strategyStorage.get("EMA3-EMA10")){
-	    	strategyStorage.save("EMA3-EMA10", $("#defaultStrategy").text());
+	    	strategyStorage.save("EMA3-EMA10", $("#ema3-ema10").text());
+	    }
+	    if (!strategyStorage.get("four-emas")){
+	    	strategyStorage.save("four-emas", $("#fourEmas").text());
+	    }
+	    if (!strategyStorage.get("Stochastic")){
+	    	strategyStorage.save("Stochastic", $("#stohastic").text());
 	    }
 	    
 		var self = this;
