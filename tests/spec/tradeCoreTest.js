@@ -6,10 +6,19 @@
         });
 		
 		var fakeApi = {
-			buy: function(){},
-			sell: function(){},
+			buy: function(){return {then: function(fn){fn()}}},
+			sell: function(){return {then: function(fn){fn()}}},
 			activeOrders: function(){},
 			cancelOrder: function(){},
+			status: function(){return {then: function(fn){
+				fn({
+					last:1,
+					balance:{
+						usd: 1,
+						btc: 1,
+					}
+				})
+			}}},
 		}
 
         it('Testing buy, sell and cancel listeners', function($rootScope, $controller) {
