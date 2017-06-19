@@ -1,5 +1,4 @@
 var chartsUi = {
-
 	makeSeries: function(data, flags, lines){
 		var flagsArray = flags ? flags.slice() : [];
 		var ohlc = [],
